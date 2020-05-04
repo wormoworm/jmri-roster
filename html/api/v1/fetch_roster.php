@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1);
-include_once('../../../lib/locomotive.php');
-include_once('../../../lib/utils.php');
+include_once('src/locomotive.php');
+include_once('src/utils.php');
 
 $startTime = getCurrentTimeMs();
 
