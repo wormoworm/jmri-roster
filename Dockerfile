@@ -6,4 +6,4 @@ RUN a2enmod rewrite
 COPY html /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html/
-RUN chmod -R 777 /var/www/html/
+RUN chmod a+rx /var/www/html/
