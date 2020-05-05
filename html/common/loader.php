@@ -24,9 +24,9 @@ class Loader{
             $locomotives[] = $locomotive;
         }
     
-        $endTime = getCurrentTimeMs();
-        error_log("Loaded " . (sizeof($locomotives)) . " locomotives in " . ($endTime - $startTime) . "ms");
-    
+        $loadTime = getCurrentTimeMs() - $startTime;
+        header('API-Content-Load-Time: ' . $loadTime . 'ms');
+
         return $locomotives;
     }
     
@@ -38,8 +38,8 @@ class Loader{
     
         $locomotive = processLocomotiveFromXML($locomotiveXML);
     
-        $endTime = getCurrentTimeMs();
-        error_log("Loaded locomotive details in " . ($endTime - $startTime) . "ms");
+        $loadTime = getCurrentTimeMs() - $startTime;
+        header('API-Content-Load-Time: ' . $loadTime . 'ms');
     
         return $locomotive;
     }
