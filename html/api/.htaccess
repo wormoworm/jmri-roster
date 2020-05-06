@@ -1,0 +1,3 @@
+RewriteEngine on
+RewriteRule ^roster$ /api/api_roster.php
+RewriteRule ^locomotive/([A-Za-z0-9]*)$ /api/api_locomotive.php?locomotive_id=$1
