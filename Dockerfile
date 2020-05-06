@@ -6,4 +6,6 @@ RUN a2enmod rewrite
 COPY html /var/www/html
 
 RUN chown -R www-data:www-data /var/www/html/
-RUN chmod -R a+rx /var/www/html/
+RUN chmod -R a+rx /var/www/html/exit
+
+CMD ["apache2-foreground"]
