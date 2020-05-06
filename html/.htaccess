@@ -1,3 +1,5 @@
 RewriteEngine on
 RewriteRule ^roster$ /show_roster.php
 RewriteRule ^locomotive/([A-Za-z0-9]*)$ /show_locomotive_details.php?locomotive_id=$1
+RewriteRule ^api/v1/roster$ /api/v1/api_roster.php
+RewriteRule ^api/v1/locomotive/([A-Za-z0-9]*)$ /api/v1/api_locomotive.php?locomotive_id=$1
