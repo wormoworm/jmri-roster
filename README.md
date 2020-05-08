@@ -37,7 +37,7 @@ GET locomotive/<id>
 Shows detailed information about a single locomotive. The `id` parameter is the ID of the locomotive, and corresponds to the `id` column found in the roster table .
 
 ## Ok this sounds great. How do I install this?
-Setup using Docker is simple. Basically all you need to mount your `jmri/data` directory into the container and tell it was port to use for API and web UI access. 
+Setup using Docker is simple. Basically all you need to do is to mount your `jmri/data` directory into the container and tell it which port to use for API and web UI access. 
 ### Docker run
 ```
 docker run -d -p 80:8080 -v /path/to/jmri/data:/var/www/jmri-data tomhomewood/roster:latest
