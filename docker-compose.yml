@@ -11,7 +11,7 @@ services:
     ports:
       - 80:8080
     volumes:
-      - /path/to/jmri/roster/data:/var/www/jmri-data
+      - /path/to/jmri/data:/var/www/jmri-data
     network_mode: bridge
 
 networks:
