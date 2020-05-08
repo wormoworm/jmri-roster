@@ -1,0 +1,20 @@
+# Example compose file, assumes a network named "bridge" already exists on the Docker host.
+version: "2.2"
+
+services:
+  roster:
+    image: tomhomewood/roster:latest
+    container_name: roster
+    restart: unless-stopped
+    cpu_count: 2
+    mem_limit: 256m
+    ports:
+      - 80:8080
+    volumes:
+      - /path/to/jmri/roster/data:/var/www/jmri-data
+    network_mode: bridge
+
+networks:
+  default:
+    external:
+      name: bridge
