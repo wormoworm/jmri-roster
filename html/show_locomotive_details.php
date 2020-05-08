@@ -34,7 +34,7 @@ if($locomotive==null){
         <h1 id="title"><?php echo getPageTitle($locomotive); ?></h1>
         <?php
         echo $locomotive->imageFilePath;
-        $imagePath = $rewritesAvailable ? 'api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
+        $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
         if(isset($locomotive->imageFilePath)) echo '<img id="image" src="'.$imagePath.'"/>';
         if(isset($locomotive->comment)) echo '<p id="comment">'.$locomotive->comment.'</p>';
         ?>
