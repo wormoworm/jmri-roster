@@ -12,7 +12,7 @@ class Loader{
     }
 
     function loadRoster(){
-        $startTime = getCurrentTimeMs();
+        $startTimestamp = getCurrentTimeMs();
         
         $rosterFile = $this->rosterBasePath . "/roster.xml";
         $xml = simplexml_load_file($rosterFile);
@@ -25,7 +25,7 @@ class Loader{
             $roster->addLocomotive($locomotive);
         }
     
-        $loadTime = getCurrentTimeMs() - $startTime;
+        $loadTime = getCurrentTimeMs() - $startTimestamp;
         header('API-Content-Load-Time: ' . $loadTime . 'ms');
 
         $roster->created = filectime($rosterFile);
@@ -36,7 +36,7 @@ class Loader{
     }
     
     function loadLocomotive($locomotiveId){
-        $startTime = getCurrentTimeMs();
+        $startTimestamp = getCurrentTimeMs();
 
         $locomotiveFile = $this->rosterBasePath . '/roster/' . $locomotiveId . '.xml';
 
@@ -46,7 +46,7 @@ class Loader{
         
             $locomotive = processLocomotiveFromXML($locomotiveXML);
         
-            $loadTime = getCurrentTimeMs() - $startTime;
+            $loadTime = getCurrentTimeMs() - $startTimestamp;
             header('API-Content-Load-Time: ' . $loadTime . 'ms');
         
             return $locomotive;

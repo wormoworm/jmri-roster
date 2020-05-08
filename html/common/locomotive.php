@@ -1,5 +1,7 @@
 <?php
 
+include_once('utils.php');
+
 define('KEY_ID', 'id');
 define('KEY_DCC_ADDRESS', 'dccAddress');
 define('KEY_FILE_NAME', 'fileName');
@@ -49,15 +51,11 @@ function processLocomotiveFromXML($locomotiveXML): Locomotive {
     setStringPropertyIfAvailable($attributes[KEY_COMMENT], $locomotive->comment);
     if(isSetAndNotEmpty($attributes[KEY_IMAGE_FILE_PATH])){
         $imagePathPieces = explode(FORWARD_SLASH, $attributes[KEY_IMAGE_FILE_PATH]);
-        $relativePathPieces = array('jmri-data', $imagePathPieces[sizeof($imagePathPieces)-2], $imagePathPieces[sizeof($imagePathPieces)-1]);
+        $relativePathPieces = array($imagePathPieces[sizeof($imagePathPieces)-2], $imagePathPieces[sizeof($imagePathPieces)-1]);
         $relativeImagePath = join(FORWARD_SLASH, $relativePathPieces);
         $locomotive->imageFilePath = $relativeImagePath;
     }
     return $locomotive;
-}
-
-function isSetAndNotEmpty($value){
-    return isset($value) && $value != "";
 }
 
 function setStringPropertyIfAvailable($source, &$destination){
