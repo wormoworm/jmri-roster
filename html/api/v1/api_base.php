@@ -1,6 +1,6 @@
 <?php
 
-define('ROSTER_BATH_PATH', '../../../jmri-data/');
+define('ROSTER_BASE_PATH', '../../../jmri-data/');
 
 function outputAsJson($data){
     header('Content-type: application/json');
