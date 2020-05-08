@@ -9,6 +9,10 @@ if(!isset($_GET['locomotive_id'])){
 include('ui_base.php');
 include_once('common/loader.php');
 
+function getPageTitle($locomotive){
+    return $locomotive->id;
+}
+
 $loader = new Loader(ROSTER_BATH_PATH);
 $locomotive = $loader -> loadLocomotive($_GET['locomotive_id']);
 if($locomotive==null){
@@ -16,15 +20,18 @@ if($locomotive==null){
     echo 'Error: Locomotive with ID '.$_GET['locomotive_id'].' not found';
     die();
 }
-
-# If we reach here, we have a locomotive's data to display.
-
-# TODO Output a nice table with loco image.
-echo 
-'<html>
-    <head>
-        <title>'.$locomotive->id.'</title>
-    </head>
-</html>';
-print_r($locomotive);
 ?>
+
+<html>
+    <head>
+        <title><?php echo getPageTitle($locomotive); ?></title>
+    </head>
+    <body>
+        <h1 id="title"><?php echo getPageTitle($locomotive); ?></h1>
+        <?php
+        echo $locomotive->imageFilePath;
+        if(isset($locomotive->imageFilePath)) echo '<img id="image" src="'.$locomotive->imageFilePath.'"/>';
+        if(isset($locomotive->comment)) echo '<p id="comment">'.$locomotive->comment.'</p>';
+        ?>
+    </body>
+</html>

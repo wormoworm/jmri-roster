@@ -16,7 +16,7 @@ $roster = $loader -> loadRoster();
         <title><?php echo getPageTitle(); ?></title>
     </head>
     <body>
-        <h1><?php echo getPageTitle(); ?></h1>
+        <h1 id="title"><?php echo getPageTitle(); ?></h1>
         <p><?php echo 'The roster contains '.$roster->getLocomotiveCount().' locomotives, and was last updated on '.getFriendlyDate($roster->modified).' at '.getFriendlyTime($roster->modified).'.';?></p>
         <table id="locomotives">
             <tr>

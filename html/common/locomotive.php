@@ -11,6 +11,8 @@ define('KEY_OWNER', 'owner');
 define('KEY_COMMENT', 'comment');
 define('KEY_IMAGE_FILE_PATH', 'imageFilePath');
 
+define('FORWARD_SLASH', '/');
+
 class Locomotive {
 
     // Required properties - these are passed to the constructor.
@@ -45,7 +47,12 @@ function processLocomotiveFromXML($locomotiveXML): Locomotive {
     setStringPropertyIfAvailable($attributes[KEY_MODEL], $locomotive->model);
     setStringPropertyIfAvailable($attributes[KEY_OWNER], $locomotive->owner);
     setStringPropertyIfAvailable($attributes[KEY_COMMENT], $locomotive->comment);
-    setStringPropertyIfAvailable($attributes[KEY_IMAGE_FILE_PATH], $locomotive->imageFilePath);
+    if(isSetAndNotEmpty($attributes[KEY_IMAGE_FILE_PATH])){
+        $imagePathPieces = explode(FORWARD_SLASH, $attributes[KEY_IMAGE_FILE_PATH]);
+        $relativePathPieces = array('jmri-data', $imagePathPieces[sizeof($imagePathPieces)-2], $imagePathPieces[sizeof($imagePathPieces)-1]);
+        $relativeImagePath = join(FORWARD_SLASH, $relativePathPieces);
+        $locomotive->imageFilePath = $relativeImagePath;
+    }
     return $locomotive;
 }
 

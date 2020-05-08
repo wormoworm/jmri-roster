@@ -14,7 +14,7 @@ class Loader{
     function loadRoster(){
         $startTime = getCurrentTimeMs();
         
-        $rosterFile = $this->rosterBasePath . "roster.xml";
+        $rosterFile = $this->rosterBasePath . "/roster.xml";
         $xml = simplexml_load_file($rosterFile);
         $rosterXML = $xml->children()[0];
     
@@ -38,7 +38,7 @@ class Loader{
     function loadLocomotive($locomotiveId){
         $startTime = getCurrentTimeMs();
 
-        $locomotiveFile = $this->rosterBasePath . 'roster/' . $locomotiveId . '.xml';
+        $locomotiveFile = $this->rosterBasePath . '/roster/' . $locomotiveId . '.xml';
 
         if(file_exists($locomotiveFile)){    
             $xml = simplexml_load_file($locomotiveFile);
