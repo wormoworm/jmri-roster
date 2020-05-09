@@ -1,7 +1,10 @@
 <?php
-ini_set('display_errors', '1');
+include_once('ui_base.php');
+include_once('common/loader.php');
+include_once('common/image.php');
 
-$rewritesAvailable = false;
+$rewritesAvailable = true;
+if($GLOBALS['DEVELOPMENT_SERVER']) $rewritesAvailable = false;
 
 $imageWidth = 900;
 
@@ -11,9 +14,6 @@ if(!isset($_GET['locomotive_id'])){
     die();
 }
 
-include_once('ui_base.php');
-include_once('common/loader.php');
-include_once('common/image.php');
 
 function getPageTitle($locomotive){
     if(isSetAndNotEmpty($locomotive->number)) return $locomotive->number;

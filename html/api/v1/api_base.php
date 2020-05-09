@@ -1,4 +1,5 @@
 <?php
+include_once('../../common/base.php');
 
 define('ROSTER_BASE_PATH', '../../jmri-data');
 
