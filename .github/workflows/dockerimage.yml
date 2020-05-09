@@ -1,0 +1,21 @@
+name: Build docker image and deploy to Docker Hub
+
+on: [push]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag tomhomewood/jmri-roster:latest
+    - name: Docker Push
+      uses: opspresso/action-docker@v0.2.2
+      env:
+          USERNAME: tomhomewood
+          PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          IMAGE_NAME: "tomhomewood/jmri-roster"
+          TAG_NAME: "latest"
