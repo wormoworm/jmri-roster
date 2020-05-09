@@ -6,7 +6,7 @@ function getPageTitle(){
     return 'Roster';
 }
 
-$loader = new Loader(ROSTER_BATH_PATH);
+$loader = new Loader(ROSTER_BASE_PATH);
 $roster = $loader -> loadRoster();
 ?>
 
