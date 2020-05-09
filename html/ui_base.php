@@ -1,6 +1,6 @@
 <?php
 
-define('ROSTER_BATH_PATH', 'jmri-data');
+define('ROSTER_BASE_PATH', 'jmri-data');
 
 function getFriendlyDate($timestamp){
     return date('jS F Y', $timestamp);

@@ -13,10 +13,7 @@ if(!isset($_GET['locomotive_id'])){
 }
 
 include_once('../../common/loader.php');
-
-define('IMAGE_EXTENSION_JPG', 'jpg');
-define('IMAGE_EXTENSION_PNG', 'png');
-define('MAX_WIDTH', 6000);
+include_once('../../common/image.php');
 
 $loader = new Loader(ROSTER_BASE_PATH);
 $locomotive = $loader->loadLocomotive($_GET['locomotive_id']);

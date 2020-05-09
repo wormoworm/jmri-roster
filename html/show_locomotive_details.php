@@ -11,8 +11,9 @@ if(!isset($_GET['locomotive_id'])){
     die();
 }
 
-include('ui_base.php');
+include_once('ui_base.php');
 include_once('common/loader.php');
+include_once('common/image.php');
 
 function getPageTitle($locomotive){
     if(isSetAndNotEmpty($locomotive->number)) return $locomotive->number;
@@ -27,7 +28,9 @@ function outputTableRow($name, $value){
         ';
 }
 
-$loader = new Loader(ROSTER_BATH_PATH);
+
+
+$loader = new Loader(ROSTER_BASE_PATH);
 $locomotive = $loader -> loadLocomotive($_GET['locomotive_id']);
 if($locomotive==null){
     http_response_code(404);
@@ -53,8 +56,9 @@ if($locomotive==null){
         ';
         # Display the locomotive's image if available.
         if(isset($locomotive->imageFilePath)){
+            $imageDimensions = getImageDimensions(ROSTER_BASE_PATH.'/'.$locomotive->imageFilePath, $imageWidth);
             $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
-            echo '<img id="image" width="900" height="506" src="'.$imagePath.'"/>
+            echo '<img id="image" width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'" src="'.$imagePath.'"/>
         ';
         }
         ?>
