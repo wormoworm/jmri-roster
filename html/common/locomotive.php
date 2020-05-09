@@ -12,6 +12,14 @@ define('KEY_MODEL', 'model');
 define('KEY_OWNER', 'owner');
 define('KEY_COMMENT', 'comment');
 define('KEY_IMAGE_FILE_PATH', 'imageFilePath');
+define('KEY_ATTRIBUTE_PAIRS', 'attributepairs');
+define('KEY_KEY_VALUE_PAIR', 'keyvaluepair');
+define('KEY_KEY', 'key');
+define('KEY_VALUE', 'value');
+
+define('ATTRIBUTE_NAME', 'Name');
+define('ATTRIBUTE_OPERATING_DURATION', 'OperatingDuration');
+define('ATTRIBUTE_LAST_OPERATED', 'LastOperated');
 
 define('FORWARD_SLASH', '/');
 
@@ -30,6 +38,8 @@ class Locomotive {
     public $owner;
     public $comment;
     public $imageFilePath;
+    public $operatingDuration;
+    public $lastOperated;
 
     function __construct(string $id, string $dccAddress, string $fileName){
         $this->id = $id;
@@ -44,7 +54,6 @@ function processLocomotiveFromXML($locomotiveXML): Locomotive {
     $locomotive = new Locomotive($attributes[KEY_ID], $attributes[KEY_DCC_ADDRESS], $attributes[KEY_FILE_NAME]);
     // Add each of the optional fields, if available.
     setStringPropertyIfAvailable($attributes[KEY_NUMBER], $locomotive->number);
-    setStringPropertyIfAvailable($attributes[KEY_NAME], $locomotive->name);
     setStringPropertyIfAvailable($attributes[KEY_MANUFACTURER], $locomotive->manufacturer);
     setStringPropertyIfAvailable($attributes[KEY_MODEL], $locomotive->model);
     setStringPropertyIfAvailable($attributes[KEY_OWNER], $locomotive->owner);
@@ -54,6 +63,24 @@ function processLocomotiveFromXML($locomotiveXML): Locomotive {
         $relativePathPieces = array($imagePathPieces[sizeof($imagePathPieces)-2], $imagePathPieces[sizeof($imagePathPieces)-1]);
         $relativeImagePath = join(FORWARD_SLASH, $relativePathPieces);
         $locomotive->imageFilePath = $relativeImagePath;
+    }
+    # Check if there are any key-value pairs we might be interested in. These are in <locomotive> => <attributepairs>.
+    $attributePairs = $locomotiveXML->xpath(KEY_ATTRIBUTE_PAIRS.'/'.KEY_KEY_VALUE_PAIR);
+    // print_r($attributePairs);
+    foreach($attributePairs as $attributePair){
+        $key = (string) $attributePair->xpath(KEY_KEY)[0];
+        $value = (string )$attributePair->xpath(KEY_VALUE)[0];
+        switch($key){
+            case ATTRIBUTE_NAME:
+                $locomotive->name = $value;
+                break;
+            case ATTRIBUTE_OPERATING_DURATION:
+                $locomotive->operatingDuration = $value;
+                break;
+            case ATTRIBUTE_LAST_OPERATED:
+                echo $locomotive->lastOperated = strtotime($value);
+                break;
+        }
     }
     return $locomotive;
 }
