@@ -41,7 +41,7 @@ if($locomotive==null){
 
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <link rel="stylesheet" type="text/css" href="<?php if($rewritesAvailable) echo '../../';?>style.css"/>
         <title><?php echo getPageTitle($locomotive); ?></title>
     </head>
     <body>
