@@ -9,6 +9,14 @@ function isSetAndNotEmpty($value){
     return isset($value) && $value != "";
 }
 
+function getFriendlyDate($timestamp){
+    return date('jS F Y', $timestamp);
+}
+
+function getFriendlyTime($timestamp){
+    return date('H:i', $timestamp);
+}
+
 function getFriendlyDuration($durationS){
     $hours = floor($durationS / 3600);
     $hoursRemainder = $durationS % 3600;

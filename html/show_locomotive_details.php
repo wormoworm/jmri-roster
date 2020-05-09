@@ -22,8 +22,8 @@ function getPageTitle($locomotive){
 
 function outputTableRow($name, $value){
     echo '<tr>
-            <td class="tableRowLabel">'.$name.'</td>
-            <td class="tableRowValue">'.$value.'</td>
+            <td class="tableRowLabel"><p class="label">'.$name.':</p></td>
+            <td class="tableRowValue"><p class="value">'.$value.'</p></td>
         </tr>
         ';
 }
@@ -41,43 +41,47 @@ if($locomotive==null){
 
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="style.css"/>
         <title><?php echo getPageTitle($locomotive); ?></title>
     </head>
     <body>
-        <h1 id="number"><?php echo getPageTitle($locomotive); ?></h1>
-        <?php
-        # Display the locomotive's name, if it has one.
-        if(isSetAndNotEmpty($locomotive->name)){
-            echo '<h2 id="name">'.$locomotive->name.'</h2>
-        ';
-        }
-        # Display the DCC address.
-        echo '<p id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</p>
-        ';
-        # Display the locomotive's image if available.
-        if(isset($locomotive->imageFilePath)){
-            $imageDimensions = getImageDimensions(ROSTER_BASE_PATH.'/'.$locomotive->imageFilePath, $imageWidth);
-            $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
-            echo '<img id="image" width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'" src="'.$imagePath.'"/>
-        ';
-        }
-        ?>
-        <table>
+        <div id="content">
+            <h1 id="title"><?php echo getPageTitle($locomotive); ?></h1>
             <?php
-            outputTableRow('Roster ID', $locomotive->id);
-            if(isSetAndNotEmpty($locomotive->manufacturer)) outputTableRow('Manufacturer', $locomotive->manufacturer);
-            if(isSetAndNotEmpty($locomotive->model)) outputTableRow('Model', $locomotive->model);
-            if(isSetAndNotEmpty($locomotive->owner)) outputTableRow('Owner', $locomotive->owner);
-            if(isSetAndNotEmpty($locomotive->operatingDuration)) outputTableRow('Operating duration', getFriendlyDuration($locomotive->operatingDuration));
-            if(isSetAndNotEmpty($locomotive->lastOperated)) outputTableRow('Last Operated', $locomotive->lastOperated);
+            # Display the locomotive's name, if it has one.
+            if(isSetAndNotEmpty($locomotive->name)){
+                echo '<h2 id="name">'.$locomotive->name.'</h2>
+            ';
+            }
+            # Display the DCC address.
+            echo '<h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</h2>
+            ';
+            # Display the locomotive's image if available.
+            if(isset($locomotive->imageFilePath)){
+                $imageDimensions = getImageDimensions(ROSTER_BASE_PATH.'/'.$locomotive->imageFilePath, $imageWidth);
+                $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
+                echo '<img id="image" width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'" src="'.$imagePath.'"/>
+            ';
+            }
             ?>
-        </table>
-        <?php
-        # The user comment, if set.
-        if(isset($locomotive->comment)){
-            $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
-        } echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
-        ';
-        ?>
+            <table id="basicInfo" cellspacing="0" cellpadding="0">
+                <?php
+                outputTableRow('Roster ID', $locomotive->id);
+                if(isSetAndNotEmpty($locomotive->manufacturer)) outputTableRow('Manufacturer', $locomotive->manufacturer);
+                if(isSetAndNotEmpty($locomotive->model)) outputTableRow('Model', $locomotive->model);
+                if(isSetAndNotEmpty($locomotive->owner)) outputTableRow('Owner', $locomotive->owner);
+                if(isSetAndNotEmpty($locomotive->operatingDuration)) outputTableRow('Operating duration', getFriendlyDuration($locomotive->operatingDuration));
+                if(isSetAndNotEmpty($locomotive->lastOperated)) outputTableRow('Last Operated', getFriendlyDate($locomotive->lastOperated).' at '.getFriendlyTime($locomotive->lastOperated));
+                ?>
+            </table>
+            <?php
+            # The user comment, if set.
+            if(isset($locomotive->comment)){
+                $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
+                echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
+                ';
+            }
+            ?>
+        </div>
     </body>
 </html>

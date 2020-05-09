@@ -3,14 +3,6 @@ include_once('common/base.php');
 
 define('ROSTER_BASE_PATH', 'jmri-data');
 
-function getFriendlyDate($timestamp){
-    return date('jS F Y', $timestamp);
-}
-
-function getFriendlyTime($timestamp){
-    return date('H:i', $timestamp);
-}
-
 function displayFooter(){
     echo '
     <div id="footer">

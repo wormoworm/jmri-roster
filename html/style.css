@@ -1,0 +1,123 @@
+/* Common. */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, th {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: #ffffff;
+}
+
+h1{
+    font-size: 36px;
+}
+
+h2{
+    font-size: 28px;
+}
+
+h3{
+    font-size: 24px;
+}
+
+p, td, a{
+    font-size: 18px;
+}
+
+body{
+    background-color: #111111;
+}
+
+div#content{
+    width: 900px;
+    margin: 0 auto 0 auto;
+}
+
+h1#title{
+    margin: 32px 0 0 0;
+}
+
+p#subtitle{
+    margin: 8px 0 0 0;
+}
+
+/* For show_roster.php. */
+table#locomotives{
+    width: 100%;
+    margin: 32px 0 0 0;
+}
+
+table#locomotives tr th{
+    text-align: left;
+    padding: 0 0 16px 0;
+}
+
+table#locomotives th:first-child, table#locomotives td:first-child{
+    padding-left: 24px;
+}
+
+table#locomotives th:last-child, table#locomotives td:last-child{
+    padding-right: 24px;
+}
+
+table#locomotives tr.even{
+    background-color: #191919;
+}
+
+table#locomotives tr.odd{
+    background-color: #222222;
+}
+
+table#locomotives tr:hover{    
+    background-color: #555555;
+}
+
+table#locomotives tr:hover a p{    
+    /* color: blueviolet; */
+}
+
+table#locomotives tr td a{
+    display: block;
+    padding: 8px 0 8px 0;
+    text-decoration: none;
+}
+
+/* For show_locomotive_details.php. */
+h2#name{
+    margin: 8px 0 0 0;
+}
+
+h2#address{
+    margin: 8px 0 0 0;
+}
+
+h2.valueWithLabel span.valueLabel{
+    font-weight: normal;
+    vertical-align: center;
+}
+
+img#image{
+    margin: 32px 0 0 0;
+    border-radius: 4px;
+}
+
+table#basicInfo{
+    margin: 32px 0 0 0;
+}
+
+table#basicInfo tr td{
+    padding: 4px 0 4px 0;
+}
+
+table#basicInfo tr td p.label{
+    padding-right: 32px;
+}
+
+table#basicInfo tr td p.value{
+    font-weight: bold;
+}
+
+p#comment{
+    margin: 32px 0 0 0;
+}

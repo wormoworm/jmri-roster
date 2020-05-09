@@ -75,7 +75,7 @@ function processLocomotiveFromXML($locomotiveXML): Locomotive {
                 $locomotive->name = $value;
                 break;
             case ATTRIBUTE_OPERATING_DURATION:
-                $locomotive->operatingDuration = $value;
+                if($value > 0) $locomotive->operatingDuration = $value;
                 break;
             case ATTRIBUTE_LAST_OPERATED:
                 $locomotive->lastOperated = strtotime($value);
