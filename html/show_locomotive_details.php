@@ -15,13 +15,22 @@ include('ui_base.php');
 include_once('common/loader.php');
 
 function getPageTitle($locomotive){
-    return $locomotive->id;
+    if(isSetAndNotEmpty($locomotive->number)) return $locomotive->number;
+    else return $locomotive->id.' [id]';
 }
 
 function outputField($name, $value){
-    echo '
-    <p class="fieldName">'.$name.'</p>
-    <p class="fieldValue">'.$value.'</p>';
+    echo '<p class="fieldName">'.$name.'</p>
+    ';
+    echo '<p class="fieldValue">'.$value.'</p>
+    ';
+}
+
+function outputTableRow($name, $value){
+    echo '<tr>
+            <td class="tableRowLabel">'.$name.'</td>
+            <td class="tableRowValue">'.$value.'</td>
+        </tr>';
 }
 
 $loader = new Loader(ROSTER_BATH_PATH);
@@ -35,17 +44,38 @@ if($locomotive==null){
 
 <html>
     <head>
-        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
         <title><?php echo getPageTitle($locomotive); ?></title>
     </head>
     <body>
-        <h1 id="title"><?php echo getPageTitle($locomotive); ?></h1>
+        <h1 id="number"><?php echo getPageTitle($locomotive); ?></h1>
         <?php
-        $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
-        if(isset($locomotive->imageFilePath)) echo '<img id="image" src="'.$imagePath.'"/>';
-        if(isSetAndNotEmpty($locomotive->manufacturer)) outputField('Manufacturer', $locomotive->manufacturer);
-        if(isSetAndNotEmpty($locomotive->model)) outputField('Model', $locomotive->model);
-        if(isset($locomotive->comment)) echo '<p id="comment" class="body">'.$locomotive->comment.'</p>';
+        # Display the locomotive's name, if it has one.
+        if(isSetAndNotEmpty($locomotive->name)){
+            echo '<h2 id="name">'.$locomotive->name.'</h2>';
+        }
+        # Display the DCC address.
+        echo '<p id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</p>';
+        # Display the locomotive's image if available.
+        if(isset($locomotive->imageFilePath)){
+            $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
+            echo '<img id="image" src="'.$imagePath.'"/>';
+        }
+        ?>
+        <table>
+            <?php
+            outputTableRow('Roster ID', $locomotive->id);
+            if(isSetAndNotEmpty($locomotive->manufacturer)) outputTableRow('Manufacturer', $locomotive->manufacturer);
+            if(isSetAndNotEmpty($locomotive->model)) outputTableRow('Model', $locomotive->model);
+            if(isSetAndNotEmpty($locomotive->owner)) outputTableRow('Owner', $locomotive->owner);
+            if(isSetAndNotEmpty($locomotive->operatingDuration)) outputTableRow('Operating duration', getFriendlyDuration($locomotive->operatingDuration));
+            if(isSetAndNotEmpty($locomotive->lastOperated)) outputTableRow('Last Operated', $locomotive->lastOperated);
+            ?>
+        </table>
+        <?php
+        # The user comment, if set.
+        if(isset($locomotive->comment)){
+            $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
+        } echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>';
         ?>
     </body>
 </html>
