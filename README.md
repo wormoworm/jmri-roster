@@ -24,7 +24,7 @@ GET api/v1/locomotive/<id>
 Returns a JSON object containing information about a single locomotive. The `id` parameter is the ID of the locomotive, and corresponds to the `id` field found in each object returned by `GET api/v1/roster`.
 
 ## Nice, but why not use one of the APIs JMRI already provides?
-I looked at using both the JMRI JSON and web APIs, and whilst they expose all the information I needed, for the API to be always available it would require JMRI to be always running on a server or NAS. This is totally overkill for serving a simple read-only view of the data!
+I looked at using both the JMRI JSON and web APIs, and whilst they expose all the information needed, for the API to be always available it would require JMRI to be always running on a server or NAS. This is totally overkill for serving a simple read-only view of the data!
 
 ## What about the GUI you mentioned earlier?
 For cases when you just want to view data quickly in a web browser, a simple web UI is also provided. As with the API, there are two components:
