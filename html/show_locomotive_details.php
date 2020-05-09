@@ -3,7 +3,7 @@ ini_set('display_errors', '1');
 
 $rewritesAvailable = false;
 
-$imageWidth = 700;
+$imageWidth = 900;
 
 if(!isset($_GET['locomotive_id'])){
     http_response_code(422);
@@ -19,18 +19,12 @@ function getPageTitle($locomotive){
     else return $locomotive->id.' [id]';
 }
 
-function outputField($name, $value){
-    echo '<p class="fieldName">'.$name.'</p>
-    ';
-    echo '<p class="fieldValue">'.$value.'</p>
-    ';
-}
-
 function outputTableRow($name, $value){
     echo '<tr>
             <td class="tableRowLabel">'.$name.'</td>
             <td class="tableRowValue">'.$value.'</td>
-        </tr>';
+        </tr>
+        ';
 }
 
 $loader = new Loader(ROSTER_BATH_PATH);
@@ -51,14 +45,17 @@ if($locomotive==null){
         <?php
         # Display the locomotive's name, if it has one.
         if(isSetAndNotEmpty($locomotive->name)){
-            echo '<h2 id="name">'.$locomotive->name.'</h2>';
+            echo '<h2 id="name">'.$locomotive->name.'</h2>
+        ';
         }
         # Display the DCC address.
-        echo '<p id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</p>';
+        echo '<p id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</p>
+        ';
         # Display the locomotive's image if available.
         if(isset($locomotive->imageFilePath)){
             $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
-            echo '<img id="image" src="'.$imagePath.'"/>';
+            echo '<img id="image" width="900" height="506" src="'.$imagePath.'"/>
+        ';
         }
         ?>
         <table>
@@ -75,7 +72,8 @@ if($locomotive==null){
         # The user comment, if set.
         if(isset($locomotive->comment)){
             $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
-        } echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>';
+        } echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
+        ';
         ?>
     </body>
 </html>
