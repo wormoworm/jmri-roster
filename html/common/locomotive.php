@@ -2,6 +2,15 @@
 
 include_once('utils.php');
 
+# Roster XML node names
+define('KEY_ATTRIBUTE_PAIRS', 'attributepairs');
+define('KEY_KEY_VALUE_PAIR', 'keyvaluepair');
+define('KEY_KEY', 'key');
+define('KEY_VALUE', 'value');
+define('KEY_FUNCTION_LABELS', 'functionlabels');
+define('KEY_FUNCTION_LABEL', 'functionlabel');
+
+# Roster XML node attributes
 define('KEY_ID', 'id');
 define('KEY_DCC_ADDRESS', 'dccAddress');
 define('KEY_FILE_NAME', 'fileName');
@@ -12,14 +21,14 @@ define('KEY_MODEL', 'model');
 define('KEY_OWNER', 'owner');
 define('KEY_COMMENT', 'comment');
 define('KEY_IMAGE_FILE_PATH', 'imageFilePath');
-define('KEY_ATTRIBUTE_PAIRS', 'attributepairs');
-define('KEY_KEY_VALUE_PAIR', 'keyvaluepair');
-define('KEY_KEY', 'key');
-define('KEY_VALUE', 'value');
+define('KEY_FUNCTION', 'imageFilePath');
+define('ATTRIBUTE_NUM', 'num');
+define('ATTRIBUTE_LOCKABLE', 'lockable');
 
-define('ATTRIBUTE_NAME', 'Name');
-define('ATTRIBUTE_OPERATING_DURATION', 'OperatingDuration');
-define('ATTRIBUTE_LAST_OPERATED', 'LastOperated');
+# Roster custom key-value pair names
+define('KV_NAME', 'Name');
+define('KV_OPERATING_DURATION', 'OperatingDuration');
+define('KV_LAST_OPERATED', 'LastOperated');
 
 define('FORWARD_SLASH', '/');
 
@@ -40,11 +49,34 @@ class Locomotive {
     public $imageFilePath;
     public $operatingDuration;
     public $lastOperated;
+    public $functions;
 
     function __construct(string $id, string $dccAddress, string $fileName){
         $this->id = $id;
         $this->dccAddress = $dccAddress;
         $this->fileName = $fileName;
+        $this->functions = array();
+    }
+
+    function addFunction($function){
+        $this->functions[''.$function->number] = $function;
+    }
+
+    function hasFunctions(){
+        return sizeof($this->functions) > 0;
+    }
+}
+
+class LocomotiveFunction {
+
+    public $number;
+    public $name;
+    public $lockable;
+
+    function __construct(int $number, string $name, bool $lockable){
+        $this->number = $number;
+        $this->name = $name;
+        $this->lockable = $lockable;
     }
 }
 
@@ -69,18 +101,27 @@ function processLocomotiveFromXML($locomotiveXML): Locomotive {
     // print_r($attributePairs);
     foreach($attributePairs as $attributePair){
         $key = (string) $attributePair->xpath(KEY_KEY)[0];
-        $value = (string )$attributePair->xpath(KEY_VALUE)[0];
+        $value = (string) $attributePair->xpath(KEY_VALUE)[0];
         switch($key){
-            case ATTRIBUTE_NAME:
+            case KV_NAME:
                 $locomotive->name = $value;
                 break;
-            case ATTRIBUTE_OPERATING_DURATION:
+            case KV_OPERATING_DURATION:
                 if($value > 0) $locomotive->operatingDuration = $value;
                 break;
-            case ATTRIBUTE_LAST_OPERATED:
+            case KV_LAST_OPERATED:
                 $locomotive->lastOperated = strtotime($value);
                 break;
         }
+    }
+    # Load any function labels. These are found in <locomotive> => <functionlabels>.
+    $functionLabels = $locomotiveXML->xpath(KEY_FUNCTION_LABELS.'/'.KEY_FUNCTION_LABEL);
+    foreach($functionLabels as $functionLabel){
+        $functionAttributes = $functionLabel->attributes();
+        $number = (int) $functionAttributes[ATTRIBUTE_NUM];
+        $name = (string) $functionLabel[0];
+        $lockable = (string) $functionAttributes[ATTRIBUTE_LOCKABLE] === 'true'? true : false;
+        $locomotive->addFunction(new LocomotiveFunction($number, $name, $lockable));
     }
     return $locomotive;
 }

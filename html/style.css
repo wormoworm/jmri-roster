@@ -10,19 +10,20 @@ h1, h2, h3, h4, h5, h6, p, a, th {
 }
 
 h1{
-    font-size: 36px;
+    font-size: 34px;
 }
 
 h2{
-    font-size: 28px;
+    font-size: 26px;
 }
 
 h3{
-    font-size: 24px;
+    font-size: 20px;
+    margin: 32px 0 8 0;
 }
 
 p, td, a{
-    font-size: 18px;
+    font-size: 16px;
 }
 
 body{
@@ -99,25 +100,21 @@ h2.valueWithLabel span.valueLabel{
 
 img#image{
     margin: 32px 0 0 0;
-    border-radius: 4px;
+    border-radius: 2px;
 }
 
-table#basicInfo{
-    margin: 32px 0 0 0;
+table.valueTable tr th{
+    text-align: left;
 }
 
-table#basicInfo tr td{
+table.valueTable tr td{
     padding: 4px 0 4px 0;
 }
 
-table#basicInfo tr td p.label{
-    padding-right: 32px;
-}
-
-table#basicInfo tr td p.value{
+table.valueTable tr td p.value{
     font-weight: bold;
 }
 
-p#comment{
-    margin: 32px 0 0 0;
+table.valueTable th:first-child, table.valueTable td:first-child{
+    padding-right: 32px;
 }
