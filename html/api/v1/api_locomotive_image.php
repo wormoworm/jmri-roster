@@ -1,6 +1,9 @@
 <?php
 include_once('api_base.php');
 
+// print_r(getallheaders());
+// die();
+
 function outputImageAsJpg($image){
     header('Content-type: image/jpeg');
     imagejpeg($image, NULL, 80);
@@ -41,6 +44,21 @@ if(!in_array($imageExtension, $supportedImageExtensions)){
 
 # If we reach here, there is an image we can work with.
 $startTimestamp = getCurrentTimeMs();
+
+# Get the image file's modification time - we will use this for caching
+$fileModificationTimestamp = filemtime(ROSTER_BASE_PATH . '/' . $locomotive->imageFilePath);
+# Check this modification timestamp against the one provided by the browser, if supplied.
+if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])){
+    $browserModifiedSinceTimestamp = strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE']);
+    # The the file's modification time is before or equal to the browser's modification time, this means we do not have a more recent image than the browser, so we can simply return a 304.
+    if($fileModificationTimestamp <= $browserModifiedSinceTimestamp){
+        http_response_code(304);
+        die();
+    }
+}
+
+# If we reach here, we were not able to skip loading due to caching. Output the modified timestamp so the browser can keep a record of it for the next request.
+header("Last-Modified: ".gmdate('D, d M Y H:i:s', $fileModificationTimestamp).' GMT');
 
 $image;
 switch($imageExtension){
