@@ -21,7 +21,7 @@ $roster = $loader -> loadRoster();
     <head>
         <link rel="stylesheet" type="text/css" href="style.css"/>
         <title><?php echo getPageTitle(); ?></title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     </head>
     <body>
         <div id="content">

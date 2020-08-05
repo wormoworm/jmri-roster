@@ -51,6 +51,7 @@ if($locomotive==null){
     <head>
         <link rel="stylesheet" type="text/css" href="<?php if($rewritesAvailable) echo '../../';?>style.css"/>
         <title><?php echo getPageTitle($locomotive); ?></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     </head>
     <body>
         <div id="content">
