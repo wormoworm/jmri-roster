@@ -6,7 +6,7 @@
 A simple read-only API and web viewer for a [JMRI roster](https://www.jmri.org/help/en/html/apps/DecoderPro/Roster.shtml).
 
 ## Why is it?
-I built this because I was tired of having information about my locomotivesk mastered in several places. I decided that, since I was already syncing my JMRI roster to a cloud storage service, it made sense to sync this data back down to a NAS and provide an API that could serve this data to any client over the internet at any time.
+I built this because I was tired of having information about my locomotives mastered in several places. I decided that, since I was already syncing my JMRI roster to a cloud storage service, it made sense to sync this data back down to a NAS and provide an API that could serve this data to any client over the internet at any time.
 
 ## How does it work?
 When pointed at a JMRI directory containing `roster.xml` and the associated roster entry files, it will expose a simple REST API that returns either the entire roster, or the details for one particular roster entry.
