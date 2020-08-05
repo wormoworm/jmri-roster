@@ -7,11 +7,19 @@
     --margin-vertical-large: 32px;
     --margin-vertical-medium: 16px;
     --margin-vertical-small: 8px;
+    --margin-vertical-tiny: 4px;
     --text-size-h1: 34px;
     --text-size-h2: 26px;
     --text-size-h3: 20px;
     --text-size-body: 16px;
-
+    --colour-page-background: #ffffff;
+    --colour-content-background: #f6f6f6;
+    --colour-content-background-highlight: #eeeeee;
+    --colour-text: #000000;
+    /* --colour-page-background: #222222;
+    --colour-content-background: #111111;
+    --colour-content-background-highlight: #333333;
+    --colour-text: #FFFFFF; */
 }
 
 @media only screen and (max-width: 767px){
@@ -22,6 +30,7 @@
         --margin-vertical-large: 4vw;
         --margin-vertical-medium: 2vw;
         --margin-vertical-small: 1vw;
+        --margin-vertical-small: 0.5vw;
         --text-size-h1: 8vw;
         --text-size-h2: 6vw;
         --text-size-h3: 5vw;
@@ -37,37 +46,59 @@
 
 h1, h2, h3, h4, h5, h6, p, a, th {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    color: #ffffff;
+    color: var(--colour-text);
 }
 
 h1{
     font-size: var(--text-size-h1);
+    margin-top: var(--margin-vertical-medium)
 }
 
 h2{
     font-size: var(--text-size-h2);
+    margin-top: var(--margin-vertical-medium)
 }
 
 h3{
     font-size: var(--text-size-h3);
-    margin: var(--margin-vertical-large) 0 var(--margin-vertical-small) 0;
+    margin-top: var(--margin-vertical-small)
 }
 
 p, td, a{
     font-size: var(--text-size-body);
+    margin: var(--margin-vertical-small) 0 var(--margin-vertical-small) 0;
 }
 
 body{
-    background-color: #111111;
+    background-color: var(--colour-page-background);
+}
+
+.contentBlock{
+    margin-top: var(--margin-vertical-large);
+    background-color: var(--colour-content-background);
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+.contentHorizontalMargin{
+    margin: 0 var(--margin-horizontal-medium) 0 var(--margin-horizontal-medium);
+}
+
+.contentVerticalMargin{
+    margin: var(--margin-vertical-medium) 0 var(--margin-vertical-medium) 0;
+}
+
+.contentHorizontalPadding{
+    padding: 0 var(--margin-horizontal-medium) 0 var(--margin-horizontal-medium);
+}
+
+.contentVerticalPadding{
+    padding: var(--margin-vertical-medium) 0 var(--margin-vertical-medium) 0;
 }
 
 div#content{
     max-width: 100%;
     margin: 0 auto 0 auto;
-}
-
-div.content_side_margin{
-    margin: 0 var(--margin-horizontal-medium) 0 var(--margin-horizontal-medium);
 }
 
 h1#title{
@@ -79,6 +110,54 @@ p#subtitle{
 }
 
 /* For show_roster.php. */
+:root{
+    --locomotive_row_height: 20vw;
+}
+
+div.locomotiveRow{
+    width: 100vw;
+    height: var(--locomotive_row_height);
+    margin-top: var(--margin-vertical-medium);
+}
+
+div.locomotiveRow:hover{
+    background-color: var(--colour-content-background-highlight);
+}
+
+div.locomotiveThumbnail{
+    height: var(--locomotive_row_height);
+    width: var(--locomotive_row_height);
+    float: left;
+}
+
+div.locomotiveThumbnail img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+div.locomotiveRow div.textContent{
+    float: left;
+    width: calc(100vw - var(--locomotive_row_height) - (2 * var(--margin-vertical-medium)));
+    height: 100%;
+    margin: 0 var(--margin-vertical-medium) 0 var(--margin-vertical-medium);
+}
+/* 
+h3.locomotiveNumber{
+    margin-top: var(--margin-vertical-tiny);
+} */
+
+p.locomotiveName{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+p.locomotiveAddress span.addressValue{
+    font-weight: bold;
+    margin-left: var(--margin-horizontal-medium);
+}
+
 table#locomotives{
     width: 100%;
     margin: var(--margin-vertical-large) 0 0 0;
@@ -120,13 +199,6 @@ table#locomotives tr td a{
 }
 
 /* For show_locomotive_details.php. */
-h2#name{
-    margin: var(--margin-vertical-small) 0 0 0;
-}
-
-h2#address{
-    margin: var(--margin-vertical-small) 0 0 0;
-}
 
 h2.valueWithLabel span.valueLabel{
     font-weight: normal;

@@ -3,9 +3,6 @@ include_once('ui_base.php');
 include_once('common/loader.php');
 include_once('common/image.php');
 
-$rewritesAvailable = true;
-if($GLOBALS['DEVELOPMENT_SERVER']) $rewritesAvailable = false;
-
 $imageWidth = 900;
 
 if(!isset($_GET['locomotive_id'])){
@@ -13,7 +10,6 @@ if(!isset($_GET['locomotive_id'])){
     echo 'Error: locomotive_id not provided';
     die();
 }
-
 
 function getPageTitle($locomotive){
     if(isSetAndNotEmpty($locomotive->number)) return $locomotive->number;
@@ -49,13 +45,13 @@ if($locomotive==null){
 
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="<?php if($rewritesAvailable) echo '../../';?>style.css"/>
+        <link rel="stylesheet" type="text/css" href="<?php if(areURLRewritesAvailable()) echo '../../';?>style.css"/>
         <title><?php echo getPageTitle($locomotive); ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     </head>
     <body>
         <div id="content">
-            <div class="content_side_margin">
+            <div class="contentHorizontalPadding">
                 <h1 id="title"><?php echo getPageTitle($locomotive); ?></h1>
                 <?php
                 # Display the locomotive's name, if it has one.
@@ -65,17 +61,17 @@ if($locomotive==null){
                 }
                 # Display the DCC address.
                 echo '<h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</h2>            
-                </div>
-                ';
+            </div>
+            ';
             # Display the locomotive's image if available.
-            if(isset($locomotive->imageFilePath)){
+            if($locomotive->hasImage()){
                 $imageDimensions = getImageDimensions(ROSTER_BASE_PATH.'/'.$locomotive->imageFilePath, $imageWidth);
-                $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
+                $imagePath = areURLRewritesAvailable() ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
                 echo '<img id="image" src="'.$imagePath.'"/>
             ';
             }
-            ?>            
-            <div class="content_side_margin">
+            ?>
+            <div class="contentBlock contentHorizontalPadding">
                 <h3 id="locomotiveInfoTitle">Locomotive information</h3>
                 <table id="basicInfo" class="valueTable" cellspacing="0" cellpadding="0">
                     <?php
@@ -87,30 +83,38 @@ if($locomotive==null){
                     if(isSetAndNotEmpty($locomotive->lastOperated)) outputInfoTableRow('Last Operated', getFriendlyDate($locomotive->lastOperated).' at '.getFriendlyTime($locomotive->lastOperated));
                     ?>
                 </table>
-                <?php
-                # The user comment, if set.
-                if(isset($locomotive->comment)){
-                    echo '<h3 id="commentsTitle">Comment</h3>';
-                    $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
-                    echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
-                    ';
-                }
-                if($locomotive->hasFunctions()){
-                    # The function labels, if any are set.
-                    echo '<h3 id="functionsTitle">Functions</h3>
-                        <table id="functions" class="valueTable" cellspacing="0" cellpadding="0">
-                            <tr>
-                                <th>Number</th>
-                                <th>Function</th>
-                            </tr>
-                    ';
-                    foreach($locomotive->functions as $function){
-                        outputFunctionTableRow($function);
+            </div>
+                    <?php
+                    # The user comment, if set.
+                    if(isset($locomotive->comment)){
+                        echo '
+                        <div class="contentBlock contentHorizontalPadding">
+                            <h3 id="commentsTitle">Comment</h3>';
+                            $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
+                            echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
+                        </div>
+                        ';
                     }
-                    echo '</table>
-                    ';
-                }
-                ?>
+                    if($locomotive->hasFunctions()){
+                        # The function labels, if any are set.
+                        echo '
+                        <div class="contentBlock contentHorizontalPadding">
+                            <h3 id="functionsTitle">Functions</h3>
+                                <table id="functions" class="valueTable" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <th>Number</th>
+                                        <th>Function</th>
+                                    </tr>
+                            ';
+                            foreach($locomotive->functions as $function){
+                                outputFunctionTableRow($function);
+                            }
+                            echo '</table>
+                        </div>
+                        ';
+                    }
+                    ?>
+                </div>
             </div>
         </div>
     </body>

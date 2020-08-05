@@ -58,6 +58,10 @@ class Locomotive {
         $this->functions = array();
     }
 
+    function hasImage(){
+        return isset($this->imageFilePath);
+    }
+
     function addFunction($function){
         $this->functions[''.$function->number] = $function;
     }

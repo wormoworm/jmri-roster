@@ -6,4 +6,8 @@ $GLOBALS['DEVELOPMENT_SERVER'] = isset($_SERVER['SERVER_SOFTWARE']) && strpos($_
 function isDevelopmentServer(){
     return $GLOBALS['DEVELOPMENT_SERVER'];
 }
+
+function areURLRewritesAvailable(){
+    return !isDevelopmentServer();
+}
 ?>
