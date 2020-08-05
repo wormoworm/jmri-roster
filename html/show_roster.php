@@ -1,4 +1,5 @@
 <?php
+
 include('ui_base.php');
 include_once('common/loader.php');
 
@@ -20,6 +21,7 @@ $roster = $loader -> loadRoster();
     <head>
         <link rel="stylesheet" type="text/css" href="style.css"/>
         <title><?php echo getPageTitle(); ?></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <div id="content">

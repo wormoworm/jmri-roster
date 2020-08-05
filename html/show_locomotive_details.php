@@ -43,6 +43,8 @@ if($locomotive==null){
     echo 'Error: Locomotive with ID '.$_GET['locomotive_id'].' not found';
     die();
 }
+
+# width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'"
 ?>
 
 <html>
@@ -52,59 +54,63 @@ if($locomotive==null){
     </head>
     <body>
         <div id="content">
-            <h1 id="title"><?php echo getPageTitle($locomotive); ?></h1>
-            <?php
-            # Display the locomotive's name, if it has one.
-            if(isSetAndNotEmpty($locomotive->name)){
-                echo '<h2 id="name">'.$locomotive->name.'</h2>
-            ';
-            }
-            # Display the DCC address.
-            echo '<h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</h2>
-            ';
+            <div class="content_side_margin">
+                <h1 id="title"><?php echo getPageTitle($locomotive); ?></h1>
+                <?php
+                # Display the locomotive's name, if it has one.
+                if(isSetAndNotEmpty($locomotive->name)){
+                    echo '<h2 id="name">'.$locomotive->name.'</h2>
+                ';
+                }
+                # Display the DCC address.
+                echo '<h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>'.$locomotive->dccAddress.'</h2>            
+                </div>
+                ';
             # Display the locomotive's image if available.
             if(isset($locomotive->imageFilePath)){
                 $imageDimensions = getImageDimensions(ROSTER_BASE_PATH.'/'.$locomotive->imageFilePath, $imageWidth);
                 $imagePath = $rewritesAvailable ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
-                echo '<img id="image" width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'" src="'.$imagePath.'"/>
+                echo '<img id="image" src="'.$imagePath.'"/>
             ';
             }
-            ?>
-            <h3 id="locomotiveInfoTitle">Locomotive information</h3>
-            <table id="basicInfo" class="valueTable" cellspacing="0" cellpadding="0">
+            ?>            
+            <div class="content_side_margin">
+                <h3 id="locomotiveInfoTitle">Locomotive information</h3>
+                <table id="basicInfo" class="valueTable" cellspacing="0" cellpadding="0">
+                    <?php
+                    outputInfoTableRow('Roster ID', $locomotive->id);
+                    if(isSetAndNotEmpty($locomotive->manufacturer)) outputInfoTableRow('Manufacturer', $locomotive->manufacturer);
+                    if(isSetAndNotEmpty($locomotive->model)) outputInfoTableRow('Model', $locomotive->model);
+                    if(isSetAndNotEmpty($locomotive->owner)) outputInfoTableRow('Owner', $locomotive->owner);
+                    if(isSetAndNotEmpty($locomotive->operatingDuration)) outputInfoTableRow('Operating duration', getFriendlyDuration($locomotive->operatingDuration));
+                    if(isSetAndNotEmpty($locomotive->lastOperated)) outputInfoTableRow('Last Operated', getFriendlyDate($locomotive->lastOperated).' at '.getFriendlyTime($locomotive->lastOperated));
+                    ?>
+                </table>
                 <?php
-                outputInfoTableRow('Roster ID', $locomotive->id);
-                if(isSetAndNotEmpty($locomotive->manufacturer)) outputInfoTableRow('Manufacturer', $locomotive->manufacturer);
-                if(isSetAndNotEmpty($locomotive->model)) outputInfoTableRow('Model', $locomotive->model);
-                if(isSetAndNotEmpty($locomotive->owner)) outputInfoTableRow('Owner', $locomotive->owner);
-                if(isSetAndNotEmpty($locomotive->operatingDuration)) outputInfoTableRow('Operating duration', getFriendlyDuration($locomotive->operatingDuration));
-                if(isSetAndNotEmpty($locomotive->lastOperated)) outputInfoTableRow('Last Operated', getFriendlyDate($locomotive->lastOperated).' at '.getFriendlyTime($locomotive->lastOperated));
-                ?>
-            </table>
-            <?php
-            # The user comment, if set.
-            if(isset($locomotive->comment)){
-                echo '<h3 id="commentsTitle">Comment</h3>';
-                $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
-                echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
-                ';
-            }
-            if($locomotive->hasFunctions()){
-                # The function labels, if any are set.
-                echo '<h3 id="functionsTitle">Functions</h3>
-                    <table id="functions" class="valueTable" cellspacing="0" cellpadding="0">
-                        <tr>
-                            <th>Number</th>
-                            <th>Function</th>
-                        </tr>
-                ';
-                foreach($locomotive->functions as $function){
-                    outputFunctionTableRow($function);
+                # The user comment, if set.
+                if(isset($locomotive->comment)){
+                    echo '<h3 id="commentsTitle">Comment</h3>';
+                    $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
+                    echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
+                    ';
                 }
-                echo '</table>
-                ';
-            }
-            ?>
+                if($locomotive->hasFunctions()){
+                    # The function labels, if any are set.
+                    echo '<h3 id="functionsTitle">Functions</h3>
+                        <table id="functions" class="valueTable" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <th>Number</th>
+                                <th>Function</th>
+                            </tr>
+                    ';
+                    foreach($locomotive->functions as $function){
+                        outputFunctionTableRow($function);
+                    }
+                    echo '</table>
+                    ';
+                }
+                ?>
+            </div>
         </div>
     </body>
 </html>
