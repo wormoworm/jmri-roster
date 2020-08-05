@@ -42,7 +42,7 @@ if($locomotive==null){
 
 # width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'"
 ?>
-
+<!DOCTYPE html>
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="<?php if(areURLRewritesAvailable()) echo '../../';?>style.css"/>
@@ -111,7 +111,5 @@ if($locomotive==null){
                     }
                     ?>
                 </div>
-            </div>
-        </div>
     </body>
 </html>

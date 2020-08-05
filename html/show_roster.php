@@ -64,7 +64,6 @@ $roster = $loader -> loadRoster();
         outputLocomotiveRow($locomotive);
     }
     ?>
-            </table>
         <?php displayFooter(); ?>
     </div>
     </body>
