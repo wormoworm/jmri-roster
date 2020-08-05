@@ -99,12 +99,8 @@ if($locomotive==null){
                         # The function labels, if any are set.
                         echo '
                         <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
-                            <h3 id="functionsTitle">Functions</h3>
+                            <h3>Functions</h3>
                                 <table id="functions" class="valueTable" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <th>Number</th>
-                                        <th>Function</th>
-                                    </tr>
                             ';
                             foreach($locomotive->functions as $function){
                                 outputFunctionTableRow($function);
