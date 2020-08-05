@@ -66,7 +66,7 @@ h3{
 
 p, td, a{
     font-size: var(--text-size-body);
-    margin: var(--margin-vertical-small) 0 var(--margin-vertical-small) 0;
+    margin-top: var(--margin-vertical-small);
 }
 
 body{
@@ -81,32 +81,28 @@ body{
 }
 
 .contentHorizontalMargin{
-    margin: 0 var(--margin-horizontal-medium) 0 var(--margin-horizontal-medium);
+    margin-left: var(--margin-horizontal-medium);
+    margin-right: var(--margin-horizontal-medium);
 }
 
 .contentVerticalMargin{
-    margin: var(--margin-vertical-medium) 0 var(--margin-vertical-medium) 0;
+    margin-top: var(--margin-vertical-medium);
+    margin-bottom: var(--margin-vertical-medium);
 }
 
 .contentHorizontalPadding{
-    padding: 0 var(--margin-horizontal-medium) 0 var(--margin-horizontal-medium);
+    padding-left: var(--margin-horizontal-medium);
+    padding-right: var(--margin-horizontal-medium);
 }
 
 .contentVerticalPadding{
-    padding: var(--margin-vertical-medium) 0 var(--margin-vertical-medium) 0;
+    padding-top: var(--margin-vertical-medium);
+    padding-bottom: var(--margin-vertical-medium);
 }
 
 div#content{
     max-width: 100%;
     margin: 0 auto 0 auto;
-}
-
-h1#title{
-    margin: var(--margin-vertical-large) 0 0 0;
-}
-
-p#subtitle{
-    margin: var(--margin-vertical-small) 0 0 0;
 }
 
 /* For show_roster.php. */
@@ -124,7 +120,7 @@ div.locomotiveRow:hover{
     background-color: var(--colour-content-background-highlight);
 }
 
-div.locomotiveThumbnail{
+div.locomotiveThumbnail, div.defaultLocomotiveThumbnail{
     height: var(--locomotive_row_height);
     width: var(--locomotive_row_height);
     float: left;
@@ -134,6 +130,12 @@ div.locomotiveThumbnail img{
     object-fit: cover;
     width: 100%;
     height: 100%;
+}
+
+div.defaultLocomotiveThumbnail img{
+    width: 100%;
+    height: 100%;
+    filter: opacity(10%);
 }
 
 div.locomotiveRow div.textContent{
@@ -207,8 +209,9 @@ h2.valueWithLabel span.valueLabel{
 
 img#image{
     margin: var(--margin-vertical-large) 0 0 0;
-    border-radius: 2px;
     width: 100%;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
 }
 
 table.valueTable tr th{

@@ -3,6 +3,8 @@
 include('ui_base.php');
 include_once('common/loader.php');
 
+$defaultLocomotiveImagePath = 'assets/train-default.png';
+
 function getPageTitle(){
     return 'Roster';
 }
@@ -13,19 +15,22 @@ function getLocomotiveDetailLink($locomotive){
 }
 
 function outputLocomotiveRow($locomotive){
-    $thumbnailSize = 200;
-    $imagePath = areURLRewritesAvailable() ? 'api/v1/locomotive/'.$locomotive->id.'/image/'.$thumbnailSize : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&amp;width='.$thumbnailSize;
+    $thumbnailSize = 300;
+    if($locomotive->hasImage()){
+        $imageClass = 'locomotiveThumbnail';
+        $imagePath = areURLRewritesAvailable() ? 'api/v1/locomotive/'.$locomotive->id.'/image/'.$thumbnailSize : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&amp;width='.$thumbnailSize;
+    }
+    else{
+        global $defaultLocomotiveImagePath;
+        $imagePath = $defaultLocomotiveImagePath;
+        $imageClass = 'defaultLocomotiveThumbnail';
+    }
     $link = getLocomotiveDetailLink($locomotive);
     echo '
     <div class="locomotiveRow contentBlock">
         <a href="'.$link.'">
-            <div class="locomotiveThumbnail">';
-            if($locomotive->hasImage()){
-                echo '
-                <img src="'.$imagePath.'" />';
-            }
-        echo
-        '
+            <div class="'.$imageClass.'">
+                <img src="'.$imagePath.'" />
             </div>
             <div class="textContent">
                 <h3 class="locomotiveNumber">'.$locomotive->number.'</h3>
@@ -50,8 +55,8 @@ $roster = $loader -> loadRoster();
     <body>
         <div id="content">
             <div class="contentHorizontalPadding">
-                <h1 id="title"><?php echo getPageTitle(); ?></h1>
-                <p id="subtitle"><?php echo 'The roster contains '.$roster->getLocomotiveCount().' locomotives, and was last updated on '.getFriendlyDate($roster->modified).' at '.getFriendlyTime($roster->modified).'.';?></p>
+                <h1><?php echo getPageTitle(); ?></h1>
+                <p><?php echo 'The roster contains '.$roster->getLocomotiveCount().' locomotives, and was last updated on '.getFriendlyDate($roster->modified).' at '.getFriendlyTime($roster->modified).'.';?></p>
             </div>
     <?php
     $n = 0;

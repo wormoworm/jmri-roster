@@ -71,7 +71,7 @@ if($locomotive==null){
             ';
             }
             ?>
-            <div class="contentBlock contentHorizontalPadding">
+            <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
                 <h3 id="locomotiveInfoTitle">Locomotive information</h3>
                 <table id="basicInfo" class="valueTable" cellspacing="0" cellpadding="0">
                     <?php
@@ -88,7 +88,7 @@ if($locomotive==null){
                     # The user comment, if set.
                     if(isset($locomotive->comment)){
                         echo '
-                        <div class="contentBlock contentHorizontalPadding">
+                        <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
                             <h3 id="commentsTitle">Comment</h3>';
                             $newlineFormattedComment = str_replace(PHP_EOL, '<br/>', $locomotive->comment);
                             echo '<p id="comment" class="body">'.$newlineFormattedComment.'</p>
@@ -98,7 +98,7 @@ if($locomotive==null){
                     if($locomotive->hasFunctions()){
                         # The function labels, if any are set.
                         echo '
-                        <div class="contentBlock contentHorizontalPadding">
+                        <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
                             <h3 id="functionsTitle">Functions</h3>
                                 <table id="functions" class="valueTable" cellspacing="0" cellpadding="0">
                                     <tr>
