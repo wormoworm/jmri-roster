@@ -22,10 +22,10 @@
         --margin-vertical-large: 4vw;
         --margin-vertical-medium: 2vw;
         --margin-vertical-small: 1vw;
-        --text-size-h1: 4vw;
-        --text-size-h2: 3vw;
-        --text-size-h3: 2.5vw;
-        --text-size-body: 2vw;
+        --text-size-h1: 8vw;
+        --text-size-h2: 6vw;
+        --text-size-h3: 5vw;
+        --text-size-body: 4vw;
     }
 }
 
