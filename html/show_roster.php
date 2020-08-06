@@ -27,16 +27,14 @@ function outputLocomotiveRow($locomotive){
     }
     $link = getLocomotiveDetailLink($locomotive);
     echo '
-    <div class="locomotiveRow contentBlock">
+    <div class="locomotiveRow">
         <a href="'.$link.'">
-            <div class="'.$imageClass.'">
-                <img src="'.$imagePath.'" />
-            </div>
-            <div class="textContent">
-                <h3 class="locomotiveNumber">'.$locomotive->number.'</h3>
-                <p class="locomotiveName">'.$locomotive->name.'</p>
-                <p class="locomotiveAddress">Address:<span class="addressValue">'.$locomotive->dccAddress.'</span></p>
-            </div>
+                <img src="'.$imagePath.'" class="'.$imageClass.'"/>
+                <div class="textContent">
+                    <h3 class="locomotiveNumber">'.$locomotive->number.'</h3>
+                    <p class="locomotiveName">'.$locomotive->name.'</p>
+                    <p class="locomotiveAddress">Address:<span class="addressValue">'.$locomotive->dccAddress.'</span></p>
+                </div>
         </a>
     </div>';
 }
@@ -58,12 +56,14 @@ $roster = $loader -> loadRoster();
                 <h1><?php echo getPageTitle(); ?></h1>
                 <p><?php echo 'The roster contains '.$roster->getLocomotiveCount().' locomotives, and was last updated on '.getFriendlyDate($roster->modified).' at '.getFriendlyTime($roster->modified).'.';?></p>
             </div>
+            <div id="locomotiveGrid">
     <?php
     $n = 0;
     foreach($roster->locomotives as $locomotive){
         outputLocomotiveRow($locomotive);
     }
     ?>
+        </div>
         <?php displayFooter(); ?>
     </div>
     </body>
