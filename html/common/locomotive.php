@@ -63,7 +63,7 @@ class Locomotive {
     }
 
     function addFunction($function){
-        $this->functions[''.$function->number] = $function;
+        $this->functions[] = $function;
     }
 
     function hasFunctions(){

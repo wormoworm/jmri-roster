@@ -116,7 +116,7 @@ div#content{
 div#locomotiveGrid{
     width: calc(100% - 2 * var(--margin-horizontal-medium));
     display: grid;
-    grid-template-columns: repeat(auto-fit, 580px);
+    grid-template-columns: repeat(auto-fit, 600px);
     grid-template-rows: repeat(var(--locomotive_row_height));
     grid-gap: var(--margin-vertical-medium);
     column-gap: var(--margin-horizontal-medium);
