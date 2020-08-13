@@ -10,15 +10,14 @@ if(!isset($_GET['locomotive_id'])){
 include_once('../../common/loader.php');
 
 $loader = new Loader(ROSTER_BASE_PATH);
-$locomotive = $loader->loadLocomotive($_GET['locomotive_id']);
+$rosterEntry = $loader->loadRosterEntry($_GET['locomotive_id']);
 
-if($locomotive==null){
+if($rosterEntry==null){
     http_response_code(404);
     outputAsJson(array('error:' => 'Locomotive with ID '.$_GET['locomotive_id'].' not found'));
     die();
 }
 
 # If we reach here, we have a locomotive's data to display.
-
-outputAsJson($locomotive);
+outputAsJson($rosterEntry);
 ?>

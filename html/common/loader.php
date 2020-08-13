@@ -1,6 +1,7 @@
 <?php
 include_once('locomotive.php');
 include_once('roster.php');
+include_once('roster_entry.php');
 include_once('utils.php');
 
 class Loader{
@@ -35,21 +36,28 @@ class Loader{
         return $roster;
     }
     
-    function loadLocomotive($locomotiveId){
+    function loadRosterEntry($locomotiveId){
         $startTimestamp = getCurrentTimeMs();
 
         $locomotiveFile = $this->rosterBasePath . '/roster/' . $locomotiveId . '.xml';
 
-        if(file_exists($locomotiveFile)){    
+        if(file_exists($locomotiveFile)){
             $xml = simplexml_load_file($locomotiveFile);
             $locomotiveXML = $xml->children()[0];
         
             $locomotive = processLocomotiveFromXML($locomotiveXML);
         
             $loadTime = getCurrentTimeMs() - $startTimestamp;
+
+            $rosterEntry = new RosterEntry();
+            $rosterEntry->locomotive = $locomotive;
+            $rosterEntry->created = filectime($locomotiveFile);
+            $rosterEntry->modified = filemtime($locomotiveFile);
+            $rosterEntry->loadTime = $loadTime;
+
             header('API-Content-Load-Time: ' . $loadTime . 'ms');
         
-            return $locomotive;
+            return $rosterEntry;
         }
         else{
             return null;

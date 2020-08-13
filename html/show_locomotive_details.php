@@ -33,12 +33,13 @@ function outputFunctionTableRow($function){
 }
 
 $loader = new Loader(ROSTER_BASE_PATH);
-$locomotive = $loader -> loadLocomotive($_GET['locomotive_id']);
-if($locomotive==null){
+$rosterEntry = $loader -> loadRosterEntry($_GET['locomotive_id']);
+if($rosterEntry==null){
     http_response_code(404);
     echo 'Error: Locomotive with ID '.$_GET['locomotive_id'].' not found';
     die();
 }
+$locomotive = $rosterEntry->locomotive;
 
 # width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'"
 ?>
