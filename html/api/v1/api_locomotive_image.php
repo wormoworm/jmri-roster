@@ -19,14 +19,15 @@ include_once('../../common/loader.php');
 include_once('../../common/image.php');
 
 $loader = new Loader(ROSTER_BASE_PATH);
-$locomotive = $loader->loadLocomotive($_GET['locomotive_id']);
+$rosterEntry = $loader->loadRosterEntry($_GET['locomotive_id']);
 $supportedImageExtensions = array(IMAGE_EXTENSION_JPG, IMAGE_EXTENSION_PNG);
 
-if($locomotive==null){
+if($rosterEntry==null){
     http_response_code(404);
     outputAsJson(array('error:' => 'Locomotive with ID '.$_GET['locomotive_id'].' not found.'));
     die();
 }
+$locomotive = $rosterEntry->locomotive;
 
 if(!isSetAndNotEmpty($locomotive->imageFilePath)){
     http_response_code(404);
