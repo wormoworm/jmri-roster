@@ -36,7 +36,7 @@ if(!isSetAndNotEmpty($locomotive->imageFilePath)){
 }
 
 # Check if the image file type is supported.
-$imageExtension = pathinfo($locomotive->imageFilePath, PATHINFO_EXTENSION);
+$imageExtension = strtolower(pathinfo($locomotive->imageFilePath, PATHINFO_EXTENSION));
 if(!in_array($imageExtension, $supportedImageExtensions)){
     http_response_code(415);
     outputAsJson(array('error:' => 'Locomotive with ID '.$_GET['locomotive_id'].' has an image type that is not supported.'));
