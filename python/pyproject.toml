@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "jmriroster"
+version = "0.1.0"
+description = ""
+authors = ["Tom Homewood <tomhomewood@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+rich = "^12.0.1"
+watchdog = "0.9.0"
+
+[tool.poetry.dev-dependencies]
+pylint = "^2.13.2"
+black = "^22.1.0"
+pytest-cov = "^3.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
