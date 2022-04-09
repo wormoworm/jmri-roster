@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/tom/.cache/pypoetry/virtualenvs/jmriroster-Mqjwpq9O-py3.8/bin/python"
+    // "python.pythonPath": "/home/tom/.cache/pypoetry/virtualenvs/jmriroster-Mqjwpq9O-py3.8/bin/python"
+    "python.venvPath": "~/Library/Caches/pypoetry/virtualenvs"
 }
