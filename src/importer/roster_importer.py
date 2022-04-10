@@ -70,7 +70,7 @@ class RosterImporter:
                 self.process_key_value_pair(key_value_pair, roster_entry) # There is only one key-value attribute.
             else:
                 logging.debug("KVP type (%s) not supported", type(key_value_pair))
-        except KeyError as e:
+        except (KeyError, AttributeError) as e:
             logging.error("Error getting KVPs: %s", e)
 
         self.roster_db.insert_roster_entry(roster_entry)
