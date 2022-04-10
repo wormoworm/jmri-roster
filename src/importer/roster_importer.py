@@ -13,8 +13,8 @@ def does_file_exist(path):
     return os.path.isfile(path)
 
 def roster_iso_time_string_to_epoch_second(iso_time: str) -> int:
-    time_without_offset = iso_time.split("+")[0]
-    utc_time = datetime.strptime(time_without_offset, "%Y-%m-%dT%H:%M:%S.%f")
+    # Take only the first 19 characters of the datetime - this gets rids of the unnecessary milliseconds and timezone offset components.
+    utc_time = datetime.strptime(iso_time[0:19], "%Y-%m-%dT%H:%M:%S")
     return (utc_time - datetime(1970, 1, 1)).total_seconds()
 class RosterImporter:
 
