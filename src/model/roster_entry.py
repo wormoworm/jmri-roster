@@ -10,7 +10,7 @@ db = SqliteDatabase(ROSTER_DATABASE_LOCATION)
 class RosterEntry(Model):
 
     # Required properties.
-    roster_id = IntegerField(primary_key=True)
+    roster_id = CharField(primary_key=True)
     dcc_address = CharField()
     
     # Optional properties.

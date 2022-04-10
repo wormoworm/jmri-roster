@@ -47,7 +47,7 @@ class RosterImporter:
         locomotive = roster_dict["locomotive-config"]["locomotive"]
         logging.debug(json.dumps(locomotive, indent=4))
         roster_entry = RosterEntry(
-            roster_id = int(locomotive.get("@id")),
+            roster_id = locomotive.get("@id"),
             dcc_address = locomotive.get("@dccAddress"),
             number = locomotive.get("@roadNumber"),
             manufacturer = locomotive.get("@mfg"),
