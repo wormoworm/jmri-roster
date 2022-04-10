@@ -1,5 +1,5 @@
 from peewee import *
-from roster_entry import RosterEntry, RosterFunction
+from model.roster_entry import RosterEntry, RosterFunction
 from playhouse.shortcuts import model_to_dict
 import json
 
@@ -8,7 +8,7 @@ class RosterDatabase:
     db = SqliteDatabase("roster.db", pragmas={'foreign_keys': 1})
 
     def __init__(self):
-        self.db.connect()
+        # self.db.connect()
         self.db.create_tables([RosterEntry, RosterFunction])
 
     def close(self):
