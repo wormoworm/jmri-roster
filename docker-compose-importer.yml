@@ -2,7 +2,7 @@
 version: "2.2"
 
 services:
-  roster:
+  roster-importer:
     image: tomhomewood/jmri-roster-importer:latest
     container_name: jmri-roster-importer
     restart: unless-stopped
