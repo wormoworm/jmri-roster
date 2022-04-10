@@ -11,13 +11,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Publish README to DockerHub
-      run: docker run --rm -v ${{ github.workspace }}/README.md:/data/README.md -e DOCKERHUB_USERNAME=tomhomewood -e DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -e DOCKERHUB_REPO_NAME=jmri-roster sheogorath/readme-to-dockerhub
+      run: docker run --rm -v ${{ github.workspace }}/src/importer/README.md:/data/README.md -e DOCKERHUB_USERNAME=tomhomewood -e DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -e DOCKERHUB_REPO_NAME=jmri-roster-importer sheogorath/readme-to-dockerhub
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag tomhomewood/jmri-roster:latest
+      run: docker build . --file Dockerfile-importer --tag tomhomewood/jmri-roster-importer:latest
     - name: Docker Push
       uses: opspresso/action-docker@v0.2.2
       env:
           USERNAME: tomhomewood
           PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME: "tomhomewood/jmri-roster"
+          IMAGE_NAME: "tomhomewood/jmri-roster-importer"
           TAG_NAME: "latest"
