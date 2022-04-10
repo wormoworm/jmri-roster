@@ -30,6 +30,6 @@ if __name__ == "__main__":
     RosterDatabase().clear_all_data()
     # First, import the roster from the roster directory. This takes care of any roster changes that may have occurred whilst we were not running
     importer.process_existing_files(DIRECTORY_ROSTER)
-    # Only listen for roster changes if specified.
+    # Only watch for roster changes if specified.
     if MONITOR_CHANGES:
-        RosterWatcher(roster_importer=importer).listen(DIRECTORY_ROSTER)
+        RosterWatcher(roster_importer=importer).watch(DIRECTORY_ROSTER)
