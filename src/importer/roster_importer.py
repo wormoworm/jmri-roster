@@ -3,6 +3,7 @@ import pathlib
 import logging
 import json
 from typing import OrderedDict
+from xml.dom.minidom import Attr
 import xmltodict
 from model.roster_entry import RosterEntry, RosterFunction
 from model.roster_database import RosterDatabase
@@ -83,7 +84,7 @@ class RosterImporter:
                 function.name = function_json.get("#text")
                 function.lockable = function_json.get("@lockable").lower() == "true"
                 self.roster_db.insert_roster_entry_function(function)
-        except KeyError as e:
+        except (KeyError, AttributeError) as e:
             logging.error("Error getting functions: %s", e)
 
         logging.info("Imported entry with ID %s", roster_entry.roster_id)
