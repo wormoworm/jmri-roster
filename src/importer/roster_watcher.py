@@ -13,16 +13,16 @@ class RosterWatcher(FileSystemEventHandler):
         self.roster_importer = roster_importer
         self.observer = Observer()
 
-    def listen(self, watch_directory: str):
+    def watch(self, watch_directory: str):
         self.observer.schedule(self, watch_directory)
         self.observer.start()
-        logging.debug("Watching %s for roster changes...", os.path.abspath(watch_directory))
+        logging.info("Watching %s for roster changes...", os.path.abspath(watch_directory))
         try:
             while True:
                 time.sleep(5)
         except:
             self.observer.stop()
-            logging.debug("Stopping watching...")
+            logging.info("Stopping watching...")
 
         self.observer.join()
     

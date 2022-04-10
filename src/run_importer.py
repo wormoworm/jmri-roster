@@ -10,7 +10,7 @@ from importer.roster_watcher import RosterWatcher
 from model.roster_database import RosterDatabase
 
 DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
-MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True")
+MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True").lower() == "true"
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
 
@@ -31,5 +31,5 @@ if __name__ == "__main__":
     # First, import the roster from the roster directory. This takes care of any roster changes that may have occurred whilst we were not running
     importer.process_existing_files(DIRECTORY_ROSTER)
     # Only listen for roster changes if specified.
-    if MONITOR_CHANGES == "True":
+    if MONITOR_CHANGES:
         RosterWatcher(roster_importer=importer).listen(DIRECTORY_ROSTER)
