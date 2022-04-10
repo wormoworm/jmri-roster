@@ -34,5 +34,5 @@ class RosterListener(FileSystemEventHandler):
 
         elif event.event_type == 'modified':
             time.sleep(1)   # This can help avoid processing files that are not yet fully written to disk.
-            logging.debug("Modified event")
+            # logging.info("Modified event")
             self.roster_importer.process_file(event.src_path)
