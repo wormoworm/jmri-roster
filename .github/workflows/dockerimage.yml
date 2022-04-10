@@ -1,4 +1,4 @@
-name: docker-build-publish
+name: importer-docker-build-publish
 
 on: [push]
 
