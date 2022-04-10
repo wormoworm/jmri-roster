@@ -13,10 +13,15 @@ from datetime import datetime
 def does_file_exist(path):
     return os.path.isfile(path)
 
-def roster_iso_time_string_to_epoch_second(iso_time: str) -> int:
-    # Take only the first 19 characters of the datetime - this gets rids of the unnecessary milliseconds and timezone offset components.
-    utc_time = datetime.strptime(iso_time[0:19], "%Y-%m-%dT%H:%M:%S")
-    return (utc_time - datetime(1970, 1, 1)).total_seconds()
+def roster_iso_datetime_string_to_epoch_second(iso_time: str) -> int:
+    try:
+        # Take only the first 19 characters of the datetime - this gets rids of the unnecessary milliseconds and timezone offset components.
+        utc_time = datetime.strptime(iso_time[0:19], "%Y-%m-%dT%H:%M:%S")
+        return (utc_time - datetime(1970, 1, 1)).total_seconds()
+    except ValueError as e:
+        logging.warning("Could not parse ISO datetime: %s", e)
+        return None
+
 class RosterImporter:
 
     roster_db = RosterDatabase()
@@ -71,7 +76,7 @@ class RosterImporter:
             else:
                 logging.debug("KVP type (%s) not supported", type(key_value_pair))
         except (KeyError, AttributeError) as e:
-            logging.error("Error getting KVPs: %s", e)
+            logging.warning("Error getting KVPs: %s", e)
 
         self.roster_db.insert_roster_entry(roster_entry)
         
@@ -85,7 +90,7 @@ class RosterImporter:
                 function.lockable = function_json.get("@lockable").lower() == "true"
                 self.roster_db.insert_roster_entry_function(function)
         except (KeyError, AttributeError) as e:
-            logging.error("Error getting functions: %s", e)
+            logging.warning("Error getting functions: %s", e)
 
         logging.info("Imported entry with ID %s", roster_entry.roster_id)
 
@@ -98,7 +103,7 @@ class RosterImporter:
         elif pair["key"] == "OperatingDuration":
             roster_entry.operating_duration = pair["value"]
         elif pair["key"] == "LastOperated": # TODO: Convert to epoch seconds.
-            roster_entry.last_operated = roster_iso_time_string_to_epoch_second(pair["value"])
+            roster_entry.last_operated = roster_iso_datetime_string_to_epoch_second(pair["value"])
 
 
 # TODO: Maybe filter what goes into the dict in future? Do we need to?
