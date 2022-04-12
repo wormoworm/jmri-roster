@@ -4,14 +4,14 @@ on: [push]
 
 jobs:
 
-  build:
+  build-publish-importer:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
     - name: Publish README to DockerHub
-      run: docker run --rm -v ${{ github.workspace }}/src/importer/README.md:/data/README.md -e DOCKERHUB_USERNAME=tomhomewood -e DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -e DOCKERHUB_REPO_NAME=jmri-roster-importer sheogorath/readme-to-dockerhub
+      run: docker run --rm -v ${{ github.workspace }}/README-importer.md:/data/README.md -e DOCKERHUB_USERNAME=tomhomewood -e DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -e DOCKERHUB_REPO_NAME=jmri-roster-importer sheogorath/readme-to-dockerhub
     - name: Build the Docker image
       run: docker build . --file Dockerfile-importer --tag tomhomewood/jmri-roster-importer:latest
     - name: Docker Push

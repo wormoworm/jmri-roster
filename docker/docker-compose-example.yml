@@ -1,0 +1,33 @@
+# Example compose file for the JMRI roster application stack.
+version: "2.2"
+
+services:
+  jmri-roster-importer:
+    image: tomhomewood/jmri-roster-importer:latest
+    container_name: jmri-roster-importer
+    restart: unless-stopped
+    cpu_count: 2
+    mem_limit: 256m
+    environment:
+      - DEBUG=false
+    volumes:
+      - /home/tom/OneDrive/jmri/data/roster:/roster
+      - /home/tom/jmri-roster/data:/data
+    network_mode: none
+  
+  roster-api:
+    image: tomhomewood/jmri-roster-api:latest
+    container_name: jmri-roster-api
+    restart: unless-stopped
+    cpu_count: 2
+    mem_limit: 256m
+    volumes:
+      - /home/tom/jmri-roster/data:/data
+    network: railways
+
+networks:
+  main:
+    external: true
+  railways:
+    driver: bridge
+    name: railways

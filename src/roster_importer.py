@@ -2,13 +2,22 @@ import os
 import pathlib
 import logging
 import json
+import time
 from typing import OrderedDict
 from xml.dom.minidom import Attr
 import xmltodict
-from model.roster_entry import RosterEntry, RosterFunction
-from model.roster_database import RosterDatabase
+from roster_entry import RosterEntry, RosterFunction
+from roster_database import RosterDatabase
+from roster_watcher import RosterWatcher
 from playhouse.shortcuts import model_to_dict
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
 from datetime import datetime
+from rich.logging import RichHandler
+
+DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
+MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True").lower() == "true"
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
 def does_file_exist(path):
     return os.path.isfile(path)
@@ -93,9 +102,7 @@ class RosterImporter:
             logging.warning("Error getting functions: %s", e)
 
         logging.info("Imported entry with ID %s", roster_entry.roster_id)
-
-        # entry = self.roster_db.get_roster_entry_by_id("66957")
-        # print(json.dumps(model_to_dict(entry, backrefs=True), indent=4))
+        
     
     def process_key_value_pair(self, pair: dict, roster_entry: RosterEntry):
         if pair["key"] == "Name":
@@ -104,6 +111,29 @@ class RosterImporter:
             roster_entry.operating_duration = pair["value"]
         elif pair["key"] == "LastOperated": # TODO: Convert to epoch seconds.
             roster_entry.last_operated = roster_iso_datetime_string_to_epoch_second(pair["value"])
+
+
+
+importer = RosterImporter()
+
+def callback(file_path: str):
+    importer.process_file(file_path=file_path)
+
+if __name__ == "__main__":
+    # Housekeeping
+    logging.basicConfig(
+        level="DEBUG" if DEBUG else "INFO",
+        format="%(message)s",
+        datefmt="[%X]",
+        handlers=[RichHandler(omit_repeated_times=False)],
+    )
+    RosterDatabase().clear_all_data()
+    # First, import the roster from the roster directory. This takes care of any roster changes that may have occurred whilst we were not running
+    importer.process_existing_files(DIRECTORY_ROSTER)
+    # Only watch for roster changes if specified.
+    if MONITOR_CHANGES:
+        RosterWatcher().watch(DIRECTORY_ROSTER, callback=callback)
+
 
 
 # TODO: Maybe filter what goes into the dict in future? Do we need to?

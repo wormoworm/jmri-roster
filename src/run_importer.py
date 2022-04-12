@@ -5,9 +5,9 @@ from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from rich.logging import RichHandler
 
-from importer.roster_importer import RosterImporter
-from importer.roster_watcher import RosterWatcher
-from model.roster_database import RosterDatabase
+from src.roster_importer import RosterImporter
+from src.roster_watcher import RosterWatcher
+from src.roster_database import RosterDatabase
 
 DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
 MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True").lower() == "true"
