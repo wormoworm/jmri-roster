@@ -23,7 +23,10 @@ services:
     mem_limit: 256m
     volumes:
       - /home/tom/jmri-roster/data:/data
-    network: railways
+    networks:
+      - railways
+    ports:
+      - "24080:8000"
 
 networks:
   main:
