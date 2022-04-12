@@ -13,7 +13,7 @@ jobs:
     - name: Publish README to DockerHub
       run: docker run --rm -v ${{ github.workspace }}/README-api.md:/data/README.md -e DOCKERHUB_USERNAME=tomhomewood -e DOCKERHUB_PASSWORD=${{ secrets.DOCKER_PASSWORD }} -e DOCKERHUB_REPO_NAME=jmri-roster-importer sheogorath/readme-to-dockerhub
     - name: Build the Docker image
-      run: docker build . --file Dockerfile-api --tag tomhomewood/jmri-roster-api:latest
+      run: docker build . --file docker/Dockerfile-api --tag tomhomewood/jmri-roster-api:latest
     - name: Docker Push
       uses: opspresso/action-docker@v0.2.2
       env:
