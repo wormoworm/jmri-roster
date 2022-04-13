@@ -1,1 +1,12 @@
-html/jmri-data
+.vscode/.ropeproject/objectdb
+.vscode/.ropeproject/config.py
+__pycache__
+package/release-archives/*
+.results/
+storage/
+/config/
+ssl/
+dummy_gps.tty
+.coverage
+.pytest_cache/
+coverage.xml

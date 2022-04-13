@@ -1,0 +1,242 @@
+/* Variables. */
+
+:root{
+    --margin-horizontal-large: 32px;
+    --margin-horizontal-medium: 24px;
+    --margin-horizontal-small: 16px;
+    --margin-vertical-large: 32px;
+    --margin-vertical-medium: 16px;
+    --margin-vertical-small: 8px;
+    --margin-vertical-tiny: 4px;
+    --text-size-h1: 34px;
+    --text-size-h2: 26px;
+    --text-size-h3: 20px;
+    --text-size-body: 16px;
+    --colour-page-background: #ffffff;
+    --colour-content-background: #f6f6f6;
+    --colour-content-background-highlight: #eeeeee;
+    --colour-text: #000000;
+    /* --colour-page-background: #222222;
+    --colour-content-background: #111111;
+    --colour-content-background-highlight: #333333;
+    --colour-text: #FFFFFF; */
+}
+
+@media only screen and (max-width: 600px){
+    :root{
+        --margin-horizontal-large: 4vw;
+        --margin-horizontal-medium: 3vw;
+        --margin-horizontal-small: 2vw;
+        --margin-vertical-large: 4vw;
+        --margin-vertical-medium: 2vw;
+        --margin-vertical-small: 1vw;
+        --margin-vertical-small: 0.5vw;
+        --text-size-h1: 8vw;
+        --text-size-h2: 6vw;
+        --text-size-h3: 5vw;
+        --text-size-body: 4vw;
+    }
+}
+
+/* Common. */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6, p, a, th {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--colour-text);
+}
+
+h1{
+    font-size: var(--text-size-h1);
+    margin-top: var(--margin-vertical-medium)
+}
+
+h2{
+    font-size: var(--text-size-h2);
+    margin-top: var(--margin-vertical-medium)
+}
+
+h3{
+    font-size: var(--text-size-h3);
+    margin-top: var(--margin-vertical-small)
+}
+
+p, td, a{
+    font-size: var(--text-size-body);
+}
+
+p {
+    margin-top: var(--margin-vertical-small);
+}
+
+body{
+    background-color: var(--colour-page-background);
+}
+
+.contentBlock{
+    margin-top: var(--margin-vertical-large);
+    background-color: var(--colour-content-background);
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+.contentHorizontalMargin{
+    margin-left: var(--margin-horizontal-medium);
+    margin-right: var(--margin-horizontal-medium);
+}
+
+.contentVerticalMargin{
+    margin-top: var(--margin-vertical-medium);
+    margin-bottom: var(--margin-vertical-medium);
+}
+
+.contentHorizontalPadding{
+    padding-left: var(--margin-horizontal-medium);
+    padding-right: var(--margin-horizontal-medium);
+}
+
+.contentVerticalPadding{
+    padding-top: var(--margin-vertical-medium);
+    padding-bottom: var(--margin-vertical-medium);
+}
+
+div#content{
+    max-width: 100%;
+    margin: 0 auto 0 auto;
+}
+
+/* For show_roster.php. */
+:root{
+    --locomotive_row_height: 150px;
+}
+
+div#locomotiveGrid{
+    width: calc(100% - 2 * var(--margin-horizontal-medium));
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 600px);
+    grid-template-rows: repeat(var(--locomotive_row_height));
+    grid-gap: var(--margin-vertical-medium);
+    column-gap: var(--margin-horizontal-medium);
+    padding-left: var(--margin-horizontal-medium);
+    padding-right: var(--margin-horizontal-medium);
+}
+
+/* div.locomotiveRow:before {
+    content: "";
+    display: block;
+    height: 0;
+    width: 0;
+    padding-bottom: calc(1/3 * 100%);
+} */
+
+div.locomotiveRow{
+    position: relative;
+    display: flex;
+    background-color: var(--colour-content-background);
+    border: 1px solid #dddddd;
+    /* height: var(--locomotive_row_height); */
+    /* margin-top: var(--margin-vertical-medium); */
+}
+
+div.locomotiveRow a{
+    display: block;
+    width: 100%;
+}
+
+div.locomotiveInner{
+    display: grid;
+    grid-template-columns: var(--locomotive_row_height) 1fr;
+}
+
+div.locomotiveRow:hover{
+    background-color: var(--colour-content-background-highlight);
+}
+
+img.locomotiveThumbnail, img.defaultLocomotiveThumbnail{
+    float: left;
+    width: var(--locomotive_row_height);
+    height: var(--locomotive_row_height);
+    object-fit: cover;
+}
+
+img.defaultLocomotiveThumbnail{
+    filter: opacity(0.1);
+}
+
+div.locomotiveRow div.textContent{
+    float: left;
+    margin-left: var(--margin-horizontal-medium);
+    /* width: calc(100vw - var(--locomotive_row_height) - (2 * var(--margin-vertical-medium))); */
+    /* height: 100%; */
+}
+/* 
+h3.locomotiveNumber{
+    margin-top: var(--margin-vertical-tiny);
+} */
+
+p.locomotiveName{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+p.locomotiveAddress span.addressValue{
+    font-weight: bold;
+    margin-left: var(--margin-horizontal-medium);
+}
+
+@media only screen and (max-width: 600px){
+    :root{
+        --locomotive_row_height: 20vw;
+    }
+
+    div#locomotiveGrid{
+        width: 100%;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(var(--locomotive_row_height));
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    div.locomotiveRow{
+        border-left: none;
+        border-right: none;
+    }
+
+    div.locomotiveRow div.textContent{
+        width: calc(100vw - var(--locomotive_row_height) - var(--margin-horizontal-medium));
+    }
+}
+
+/* For show_locomotive_details.php. */
+
+h2.valueWithLabel span.valueLabel{
+    font-weight: normal;
+    vertical-align: center;
+}
+
+img#image{
+    margin: var(--margin-vertical-large) 0 0 0;
+    width: 100%;
+    border-top: 1px solid #dddddd;
+    border-bottom: 1px solid #dddddd;
+}
+
+table.valueTable tr th{
+    text-align: left;
+}
+
+table.valueTable tr td{
+    padding: 4px 0 4px 0;
+}
+
+table.valueTable tr td p.value{
+    font-weight: bold;
+}
+
+table.valueTable th:first-child, table.valueTable td:first-child{
+    padding-right: var(--margin-horizontal-large);
+}

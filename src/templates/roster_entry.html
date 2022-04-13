@@ -1,0 +1,87 @@
+<!-- $imageWidth = 900;
+# width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'" -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/style.css') }}"/>
+        <title>{{ roster_entry.roster_id }}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    </head>
+    <body>
+        <div id="content">
+            <div class="contentHorizontalPadding">
+                <h1 id="title">{{ roster_entry.get_friendly_id() }}</h1>
+                {% if roster_entry.name -%}
+                    <h2 id="name">{{ roster_entry.name }}</h2>
+                {% endif %}
+                <h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>{{ roster_entry.dcc_address }}</h2>            
+            </div>
+            <!-- ';
+            # Display the locomotive's image if available.
+            if($locomotive->hasImage()){
+                $imageDimensions = getImageDimensions(ROSTER_BASE_PATH.'/'.$locomotive->imageFilePath, $imageWidth);
+                $imagePath = areURLRewritesAvailable() ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
+                echo '<img id="image" src="'.$imagePath.'"/>
+            ';
+            }
+            ?>-->
+            <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
+                <h3 id="locomotiveInfoTitle">Locomotive information</h3>
+                <table id="basicInfo" class="valueTable" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td class="tableRowLabel"><p class="label">Roster ID:</p></td>
+                        <td class="tableRowValue"><p class="value">{{ roster_entry.roster_id }}</p></td>
+                    </tr>
+                    {% if roster_entry.manufacturer -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Manufacturer:</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.manufacturer }}</p></td>
+                        </tr>
+                    {% endif %}
+                    {% if roster_entry.model -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Model:</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.model }}</p></td>
+                        </tr>
+                    {% endif %}
+                    {% if roster_entry.owner -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Owner:</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.owner }}</p></td>
+                        </tr>
+                    {% endif %}
+                    {% if roster_entry.operating_duration -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Operating duration:</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.operating_duration }}</p></td>
+                        </tr>
+                    {% endif %}
+                    {% if roster_entry.last_operated -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Last Operated:</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.last_operated }}</p></td>
+                        </tr>
+                    {% endif %}
+                </table>
+            </div>
+            {% if roster_entry.comment -%}
+                <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
+                    <h3 id="commentsTitle">Comment</h3>
+                    <p id="comment" class="body">{% autoescape false %}{{ roster_entry.comment | replace("\n", "<br/>") }}{% endautoescape %}</p>
+                </div>
+            {% endif %}
+            {% if roster_entry.functions -%}
+            <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
+                <h3>Functions</h3>
+                <table id="functions" class="valueTable" cellspacing="0" cellpadding="0">
+                {% for function in roster_entry.functions %}
+                    <tr>
+                        <td class="tableRowLabel"><p class="label">{{ function.number }} {% if not function.lockable -%} (momentary){% endif %}</p></td>
+                        <td class="tableRowValue"><p class="value">{{ function.name }}</p></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+    </body>
+</html>

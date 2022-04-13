@@ -30,6 +30,11 @@ class RosterEntry(Model):
     def has_image(self) -> bool:
         return self.image_file_path is not None
 
+    def get_friendly_id(self) -> str:
+        if self.number:
+            return self.number
+        return self.id
+
 class RosterFunction(Model):
 
     roster_entry = ForeignKeyField(RosterEntry, backref="functions")
