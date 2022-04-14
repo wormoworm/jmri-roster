@@ -1,5 +1,3 @@
-<!-- $imageWidth = 900;
-# width="'.$imageDimensions['width'].'" height="'.$imageDimensions['height'].'" -->
 <!DOCTYPE html>
 <html>
     <head>
@@ -16,15 +14,7 @@
                 {% endif %}
                 <h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>{{ roster_entry.dcc_address }}</h2>            
             </div>
-            <!-- ';
-            # Display the locomotive's image if available.
-            if($locomotive->hasImage()){
-                $imageDimensions = getImageDimensions(ROSTER_BASE_PATH.'/'.$locomotive->imageFilePath, $imageWidth);
-                $imagePath = areURLRewritesAvailable() ? '../api/v1/locomotive/'.$locomotive->id.'/image/'.$imageWidth : '/api/v1/api_locomotive_image.php?locomotive_id='.$locomotive->id.'&width='.$imageWidth;
-                echo '<img id="image" src="'.$imagePath.'"/>
-            ';
-            }
-            ?>-->
+            <img id="image" src="../../api/v2/roster_entry/66957/image?size=900"/>
             <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
                 <h3 id="locomotiveInfoTitle">Locomotive information</h3>
                 <table id="basicInfo" class="valueTable" cellspacing="0" cellpadding="0">
