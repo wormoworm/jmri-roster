@@ -7,4 +7,4 @@ RUN pip install -r app/requirements.txt
 
 WORKDIR "app"
 
-CMD ["uvicorn", "roster_api:app", "--reload", "--forwarded-allow-ips=\"*\"", "--proxy-headers", "--host", "0.0.0.0"]
+CMD ["uvicorn", "roster_api:app", "--reload", "--proxy-headers", "--host", "0.0.0.0"]
