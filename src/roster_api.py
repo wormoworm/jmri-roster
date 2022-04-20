@@ -19,6 +19,7 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+
 @app.get("/api/v2/roster")
 def get_roster():
     entries = RosterDatabase().get_all_roster_entries()

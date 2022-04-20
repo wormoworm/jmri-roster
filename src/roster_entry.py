@@ -1,5 +1,7 @@
 import os
 import pathlib
+from datetime import datetime, timedelta
+from xmlrpc.client import DateTime
 from peewee import Model, IntegerField, CharField, BooleanField, ForeignKeyField, SqliteDatabase
 
 ROSTER_DATABASE_LOCATION = os.getenv("ROSTER_DATABASE_LOCATION", "/data/roster.db")
@@ -34,6 +36,14 @@ class RosterEntry(Model):
         if self.number:
             return self.number
         return self.id
+
+    def operating_duration_hms(self) -> str:
+        return "{:0>8}".format(str(timedelta(seconds=self.operating_duration)))
+    
+    def last_operated_datetime(self) -> DateTime:
+        if self.last_operated:
+            return datetime.utcfromtimestamp(self.last_operated)
+        return None
 
 class RosterFunction(Model):
 

@@ -45,13 +45,13 @@
                     {% if roster_entry.operating_duration -%}
                         <tr>
                             <td class="tableRowLabel"><p class="label">Operating duration:</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.operating_duration }}</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.operating_duration_hms() }}</p></td>
                         </tr>
                     {% endif %}
                     {% if roster_entry.last_operated -%}
                         <tr>
                             <td class="tableRowLabel"><p class="label">Last Operated:</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.last_operated }}</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.last_operated_datetime().strftime('%Y-%m-%d %H:%M') }}</p></td>
                         </tr>
                     {% endif %}
                 </table>
