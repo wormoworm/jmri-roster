@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/style.css"/>
+        <title>Roster</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    </head>
+    <body>
+        <div id="content">
+            <div class="contentHorizontalPadding">
+                <h1>Roster</h1>
+                <p>The roster contains {{ roster_entries|length }} locomotives.</p>
+            </div>
+            <div id="locomotiveGrid">
+                {% for roster_entry in roster_entries %}
+                <div class="locomotiveRow">
+                    <a href="roster_entry/{{ roster_entry.roster_id }}">
+                        <img src="api/v2/roster_entry/{{ roster_entry.roster_id }}/image" class="locomotiveThumbnail"/>
+                        <div class="textContent">
+                            <h3 class="locomotiveNumber">{{ roster_entry.number }}</h3>
+                            <p class="locomotiveName">{{ roster_entry.name }}</p>
+                            <p class="locomotiveAddress">Address:<span class="addressValue">{{ roster_entry.dcc_address }}</span></p>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <div id="footer">
+                <p>JMRI roster v2.0.b. Source on <a href="https://github.com/wormoworm/jmri-roster">GitHub</a>.</p>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,3 +1,4 @@
+from queue import Empty
 from fastapi import FastAPI, HTTPException, Request, Response
 import json
 import os
@@ -59,6 +60,13 @@ def get_roster_entry_image(id: str, size: int = None):
             return Response(content=image_bytes.getvalue(), media_type="image/jpeg")
     except FileNotFoundError as e:
         raise HTTPException(status_code=404, detail=f"Could not load image for roster entry with {id}: {str(e)}")
+
+
+@app.get("/", response_class=HTMLResponse)
+async def show_roster(request: Request):
+    entries = RosterDatabase().get_all_roster_entries()
+    return templates.TemplateResponse("roster.html", {"request": request, "roster_entries": entries})
+
 
 @app.get("/roster_entry/{id}", response_class=HTMLResponse)
 async def show_roster_entry(request: Request, id: str):
