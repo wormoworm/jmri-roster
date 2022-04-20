@@ -25,7 +25,7 @@ class RosterDatabase:
         function.save()
 
     def get_all_roster_entries(self):
-        return list(RosterEntry.select().distinct().join(RosterFunction))
+        return list(RosterEntry.select())
 
     def get_roster_entry_by_id(self, roster_id: int) -> RosterEntry:
         return RosterEntry.get_or_none(RosterEntry.roster_id == roster_id)
