@@ -14,7 +14,7 @@
                 {% endif %}
                 <h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>{{ roster_entry.dcc_address }}</h2>            
             </div>
-            {% if roster_entry.manufacturer -%}
+            {% if roster_entry.has_image() -%}
                 <img id="image" src="../../api/v2/roster_entry/{{ roster_entry.roster_id }}/image?size=900"/>
             {% endif %}
             <div class="contentBlock contentHorizontalPadding contentVerticalPadding">

@@ -15,7 +15,11 @@
                 {% for roster_entry in roster_entries %}
                 <div class="locomotiveRow">
                     <a href="roster_entry/{{ roster_entry.roster_id }}">
+                        {% if roster_entry.has_image() %}
                         <img src="api/v2/roster_entry/{{ roster_entry.roster_id }}/image" class="locomotiveThumbnail"/>
+                        {% else %}
+                        <img src="static/train-default.png" class="defaultLocomotiveThumbnail"/>
+                        {% endif %}
                         <div class="textContent">
                             <h3 class="locomotiveNumber">{{ roster_entry.number }}</h3>
                             <p class="locomotiveName">{{ roster_entry.name }}</p>

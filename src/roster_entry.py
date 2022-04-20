@@ -30,7 +30,9 @@ class RosterEntry(Model):
         database = db
 
     def has_image(self) -> bool:
-        return self.image_file_path is not None
+        if self.image_file_path:
+            return True
+        return False
 
     def get_friendly_id(self) -> str:
         if self.number:
