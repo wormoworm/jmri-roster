@@ -1,7 +1,7 @@
 from queue import Empty
 from fastapi import FastAPI, HTTPException, Request, Response
-import json
 import os
+from os.path import exists
 from io import BytesIO
 from PIL import Image
 from roster_database import RosterDatabase
@@ -14,6 +14,7 @@ from starlette.responses import StreamingResponse
 import logging
 
 DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
+IMAGE_FILE_EXTENSIONS = [ ".jpg", ".jpeg", ".png"]
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -45,28 +46,53 @@ def get_roster_entry_by_address(address: str):
     return {"roster_entry": model_to_dict(entry, backrefs=True)}
 
 
+def output_roster_image(file_path: str, size: int = None) -> Response:
+    with Image.open(file_path) as image:
+        # Resize image if size is set
+        if size:
+            width, height = image.size
+            # Don't bother resizing if the requested size is greater than or equal to the source image size.
+            if size < width:
+                aspect_ratio = width / height
+                desired_width = size
+                desired_height = round(desired_width / aspect_ratio)
+                image = image.resize((desired_width, desired_height), Image.ANTIALIAS)
+        image_bytes = BytesIO()
+        image.save(image_bytes, format="png")
+        # media_type here sets the media type of the actual response sent to the client.
+        return Response(content=image_bytes.getvalue(), media_type="image/png")
+
+
+def search_for_roster_entry_image(roster_id: str) -> str:
+    for file in os.listdir(DIRECTORY_ROSTER):
+        file_path = f"{DIRECTORY_ROSTER}/{file}"
+        filename, file_extension = os.path.splitext(file_path)
+        if filename.endswith(roster_id) and file_extension.lower() in IMAGE_FILE_EXTENSIONS:
+            return file_path
+    return None
+
+
 @app.get("/api/v2/roster_entry/{id}/image")
-def get_roster_entry_image(id: str, size: int = None):
+def get_roster_entry_image(id: str, size: int = None, search_files: bool = True):
     entry = RosterDatabase().get_roster_entry_by_id(id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
-    try:
-        with Image.open(f"{DIRECTORY_ROSTER}/{entry.image_file_path}") as image:
-            # Resize image if size is set
-            if size:
-                width, height = image.size
-                # Don't bother resizing if the requested size is greater than or equal to the source image size.
-                if size < width:
-                    aspect_ratio = width / height
-                    desired_width = size
-                    desired_height = round(desired_width / aspect_ratio)
-                    image = image.resize((desired_width, desired_height), Image.ANTIALIAS)
-            image_bytes = BytesIO()
-            image.save(image_bytes, format="png")
-            # media_type here sets the media type of the actual response sent to the client.
-            return Response(content=image_bytes.getvalue(), media_type="image/jpeg")
-    except FileNotFoundError as e:
-        raise HTTPException(status_code=404, detail=f"Could not load image for roster entry with {id}: {str(e)}")
+    if entry.image_file_path:
+        try:
+            return output_roster_image(f"{DIRECTORY_ROSTER}/{entry.image_file_path}", size)
+        except FileNotFoundError as e:
+            raise HTTPException(status_code=404, detail=f"Error loading load image (from xml path) for roster entry {id}: {str(e)}.")
+    elif search_files:      # Optional fallback search for image files that match the roster ID. This is a stopgap to get round the annoying issue whereby JMRI seems to remove the "image_file_path" from the roster xml.
+        entry_image_file = search_for_roster_entry_image(entry.roster_id)
+        if entry_image_file:
+            try:
+                return output_roster_image(entry_image_file, size)
+            except FileNotFoundError as e:
+                raise HTTPException(status_code=404, detail=f"Error loading image (from roster directory) for roster entry {id}: {str(e)}.")
+        else:
+            raise HTTPException(status_code=404, detail=f"Could not find image for roster entry {id}: {str(e)}. A fallback search for image files was also performed.")
+    else:
+        raise HTTPException(status_code=404, detail=f"Could not find image for roster entry {id}: {str(e)}.")
 
 
 @app.get("/", response_class=HTMLResponse)
