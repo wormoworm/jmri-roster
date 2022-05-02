@@ -52,9 +52,15 @@ def get_roster_entry_image(id: str, size: int = None):
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
     try:
         with Image.open(f"{DIRECTORY_ROSTER}/{entry.image_file_path}") as image:
-            width, height = image.size
-            # TODO: Resize image if size is set
-            logging.debug(f"Image size: {image.size}")
+            # Resize image if size is set
+            if size:
+                width, height = image.size
+                # Don't bother resizing if the requested size is greater than or equal to the source image size.
+                if size < width:
+                    aspect_ratio = width / height
+                    desired_width = size
+                    desired_height = round(desired_width / aspect_ratio)
+                    image = image.resize((desired_width, desired_height), Image.ANTIALIAS)
             image_bytes = BytesIO()
             image.save(image_bytes, format="jpeg")
             # media_type here sets the media type of the actual response sent to the client.
