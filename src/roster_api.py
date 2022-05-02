@@ -62,7 +62,7 @@ def get_roster_entry_image(id: str, size: int = None):
                     desired_height = round(desired_width / aspect_ratio)
                     image = image.resize((desired_width, desired_height), Image.ANTIALIAS)
             image_bytes = BytesIO()
-            image.save(image_bytes, format="jpeg")
+            image.save(image_bytes, format="png")
             # media_type here sets the media type of the actual response sent to the client.
             return Response(content=image_bytes.getvalue(), media_type="image/jpeg")
     except FileNotFoundError as e:
