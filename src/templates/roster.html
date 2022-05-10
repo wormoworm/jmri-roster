@@ -16,7 +16,7 @@
                 <div class="locomotiveRow">
                     <a href="roster_entry/{{ roster_entry.roster_id }}">
                         {% if roster_entry.has_image() %}
-                        <img src="api/v2/roster_entry/{{ roster_entry.roster_id }}/image" class="locomotiveThumbnail"/>
+                        <img src="api/v2/roster_entry/{{ roster_entry.roster_id }}/image?size=300" class="locomotiveThumbnail"/>
                         {% else %}
                         <img src="static/train-default.png" class="defaultLocomotiveThumbnail"/>
                         {% endif %}

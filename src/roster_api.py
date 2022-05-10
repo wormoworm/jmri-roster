@@ -71,26 +71,18 @@ def search_for_roster_entry_image(roster_id: str) -> str:
             return file_path
     return None
 
-
+# TODO: Simplify once new get_image() function added to RosterEntry.
 @app.get("/api/v2/roster_entry/{id}/image")
 def get_roster_entry_image(id: str, size: int = None, search_files: bool = True):
     entry = RosterDatabase().get_roster_entry_by_id(id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
-    if entry.image_file_path:
+    image_file_path = entry.get_image_file_full_path(search_files)
+    if image_file_path:
         try:
             return output_roster_image(f"{DIRECTORY_ROSTER}/{entry.image_file_path}", size)
         except FileNotFoundError as e:
-            raise HTTPException(status_code=404, detail=f"Error loading load image (from xml path) for roster entry {id}: {str(e)}.")
-    elif search_files:      # Optional fallback search for image files that match the roster ID. This is a stopgap to get round the annoying issue whereby JMRI seems to remove the "image_file_path" from the roster xml.
-        entry_image_file = search_for_roster_entry_image(entry.roster_id)
-        if entry_image_file:
-            try:
-                return output_roster_image(entry_image_file, size)
-            except FileNotFoundError as e:
-                raise HTTPException(status_code=404, detail=f"Error loading image (from roster directory) for roster entry {id}: {str(e)}.")
-        else:
-            raise HTTPException(status_code=404, detail=f"Could not find image for roster entry {id}: {str(e)}. A fallback search for image files was also performed.")
+            raise HTTPException(status_code=404, detail=f"Error loading load image for roster entry {id}: {str(e)}.")
     else:
         raise HTTPException(status_code=404, detail=f"Could not find image for roster entry {id}: {str(e)}.")
 
