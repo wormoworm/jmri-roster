@@ -71,7 +71,7 @@ def search_for_roster_entry_image(roster_id: str) -> str:
             return file_path
     return None
 
-# TODO: Simplify once new get_image() function added to RosterEntry.
+
 @app.get("/api/v2/roster_entry/{id}/image")
 def get_roster_entry_image(id: str, size: int = None, search_files: bool = True):
     entry = RosterDatabase().get_roster_entry_by_id(id)

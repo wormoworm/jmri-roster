@@ -26,10 +26,6 @@ class RosterEntry(Model):
 
     class Meta:
         database = db
-    
-    # TODO: has_image should optionally fallback to using image file on disk.
-
-    # TODO: Provide get_image() function, which optionally falls back to using image files from disk.
 
     def get_image_file_full_path(self, search_files: bool = True):
         if self.image_file_path:
