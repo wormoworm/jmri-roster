@@ -77,10 +77,10 @@ def get_roster_entry_image(id: str, size: int = None, search_files: bool = True)
     entry = RosterDatabase().get_roster_entry_by_id(id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
-    image_file_path = entry.get_image_file_full_path(search_files)
-    if image_file_path:
+    image_file_full_path = entry.get_image_file_full_path(search_files)
+    if image_file_full_path:
         try:
-            return output_roster_image(f"{DIRECTORY_ROSTER}/{entry.image_file_path}", size)
+            return output_roster_image(image_file_full_path, size)
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=f"Error loading load image for roster entry {id}: {str(e)}.")
     else:
