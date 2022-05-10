@@ -32,7 +32,7 @@ class RosterEntry(Model):
     # TODO: Provide get_image() function, which optionally falls back to using image files from disk.
 
     def get_image_file_full_path(self, search_files: bool = True):
-        if self.image_file_path and False:
+        if self.image_file_path:
             return f"{DIRECTORY_ROSTER}/{self.image_file_path}"
         elif search_files:
             image_file_full_path = search_for_roster_entry_image(self.roster_id)
