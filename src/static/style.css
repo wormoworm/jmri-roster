@@ -12,6 +12,7 @@
     --text-size-h2: 26px;
     --text-size-h3: 20px;
     --text-size-body: 16px;
+    --text-size-caption: 12px;
     --colour-page-background: #ffffff;
     --colour-content-background: #f6f6f6;
     --colour-content-background-highlight: #eeeeee;
@@ -108,6 +109,11 @@ div#content{
     margin: 0 auto 0 auto;
 }
 
+div#footer p, div#footer a{
+    font-style: italic;
+    font-size: var(--text-size-caption);
+}
+
 /* For show_roster.php. */
 :root{
     --locomotive_row_height: 150px;
@@ -120,8 +126,6 @@ div#locomotiveGrid{
     grid-template-rows: repeat(var(--locomotive_row_height));
     grid-gap: var(--margin-vertical-medium);
     column-gap: var(--margin-horizontal-medium);
-    padding-left: var(--margin-horizontal-medium);
-    padding-right: var(--margin-horizontal-medium);
 }
 
 /* div.locomotiveRow:before {
@@ -157,6 +161,7 @@ div.locomotiveRow:hover{
 
 img.locomotiveThumbnail, img.defaultLocomotiveThumbnail{
     float: left;
+    display: block;
     width: var(--locomotive_row_height);
     height: var(--locomotive_row_height);
     object-fit: cover;
@@ -178,7 +183,16 @@ h3.locomotiveNumber{
     margin-top: var(--margin-vertical-tiny);
 } */
 
+p.locomotiveAddress{
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: var(--margin-vertical-medium);
+    margin-right: var(--margin-horizontal-medium);
+}
+
 p.locomotiveName{
+    font-style: italic;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -186,7 +200,7 @@ p.locomotiveName{
 
 p.locomotiveAddress span.addressValue{
     font-weight: bold;
-    margin-left: var(--margin-horizontal-medium);
+    margin-left: var(--margin-horizontal-small);
 }
 
 @media only screen and (max-width: 600px){

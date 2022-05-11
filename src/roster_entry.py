@@ -44,7 +44,7 @@ class RosterEntry(Model):
     def get_friendly_id(self) -> str:
         if self.number:
             return self.number
-        return self.id
+        return f"#{self.roster_id}"
 
 
     def operating_duration_hms(self) -> str:

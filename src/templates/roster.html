@@ -11,7 +11,7 @@
                 <h1>Roster</h1>
                 <p>The roster contains {{ roster_entries|length }} locomotives.</p>
             </div>
-            <div id="locomotiveGrid">
+            <div id="locomotiveGrid" class="contentHorizontalPadding contentVerticalPadding">
                 {% for roster_entry in roster_entries %}
                 <div class="locomotiveRow">
                     <a href="roster_entry/{{ roster_entry.roster_id }}">
@@ -20,16 +20,21 @@
                         {% else %}
                         <img src="static/train-default.png" class="defaultLocomotiveThumbnail"/>
                         {% endif %}
-                        <div class="textContent">
-                            <h3 class="locomotiveNumber">{{ roster_entry.number }}</h3>
-                            <p class="locomotiveName">{{ roster_entry.name }}</p>
                             <p class="locomotiveAddress">Address:<span class="addressValue">{{ roster_entry.dcc_address }}</span></p>
+                        <div class="textContent">
+                            <h2 class="locomotiveNumber">{{ roster_entry.get_friendly_id() }}</h3>
+                            {% if roster_entry.model -%}
+                            <p class="locomotiveModel">{{ roster_entry.model }}</p>
+                            {% endif %}
+                            {% if roster_entry.name -%}
+                            <p class="locomotiveName">{{ roster_entry.name }}</p>
+                            {% endif %}
                         </div>
                     </a>
                 </div>
                 {% endfor %}
             </div>
-            <div id="footer">
+            <div id="footer" class="contentHorizontalPadding contentVerticalPadding">
                 <p>JMRI roster v2.0.b. Source on <a href="https://github.com/wormoworm/jmri-roster">GitHub</a>.</p>
             </div>
         </div>
