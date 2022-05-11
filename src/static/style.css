@@ -160,6 +160,7 @@ img.locomotiveThumbnail, img.defaultLocomotiveThumbnail{
     width: var(--locomotive_row_height);
     height: var(--locomotive_row_height);
     object-fit: cover;
+    object-position: left;
 }
 
 img.defaultLocomotiveThumbnail{
