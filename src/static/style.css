@@ -195,6 +195,7 @@ p.locomotiveName{
     font-style: italic;
     white-space: nowrap;
     overflow: hidden;
+    margin-right: var(--margin-horizontal-small);
     text-overflow: ellipsis;
 }
 
@@ -205,7 +206,7 @@ p.locomotiveAddress span.addressValue{
 
 @media only screen and (max-width: 600px){
     :root{
-        --locomotive_row_height: 20vw;
+        --locomotive_row_height: 22vw;
     }
 
     div#locomotiveGrid{
