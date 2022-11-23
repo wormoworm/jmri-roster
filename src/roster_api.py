@@ -84,7 +84,7 @@ def get_roster_entry_image(id: str, size: int = None, search_files: bool = True)
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=f"Error loading load image for roster entry {id}: {str(e)}.")
     else:
-        raise HTTPException(status_code=404, detail=f"Could not find image for roster entry {id}: {str(e)}.")
+        raise HTTPException(status_code=404, detail=f"Could not find image for roster entry {id}.")
 
 
 @app.get("/", response_class=HTMLResponse)
