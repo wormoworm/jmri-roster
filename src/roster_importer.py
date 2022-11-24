@@ -6,6 +6,7 @@ import time
 from typing import OrderedDict
 from xml.dom.minidom import Attr
 import xmltodict
+import traceback
 from roster_entry import RosterEntry, RosterFunction
 from roster_database import RosterDatabase
 from roster_watcher import RosterWatcher
@@ -99,8 +100,8 @@ class RosterImporter:
                 function.lockable = function_json.get("@lockable").lower() == "true"
                 self.roster_db.insert_roster_entry_function(function)
         except (KeyError, AttributeError) as e:
+            traceback.print_exc()
             logging.warning("Error getting functions: %s", e)
-            raise e
 
         logging.info("Imported entry with ID %s", roster_entry.roster_id)
         
