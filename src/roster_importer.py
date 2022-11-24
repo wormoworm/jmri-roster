@@ -20,6 +20,9 @@ DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
 MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True").lower() == "true"
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
+# We always want these keys to be parsed into lists by xmltodict - even if there's only one of them.
+FORCE_LIST_KEYS = ["functionlabel", "keyvaluepair"]
+
 def does_file_exist(path):
     return os.path.isfile(path)
 
@@ -45,8 +48,7 @@ class RosterImporter:
             self.process_file(roster_directory + "/" + file)
 
     def process_file(self, file_path):
-        logging.debug("About to process file: %s", os.path.abspath(file_path))
-        
+        logging.info("About to process file: %s", os.path.abspath(file_path))
         if not self.should_process_file(file_path):
             logging.debug("Ignoring file: %s", file_path)
             return None
@@ -55,7 +57,7 @@ class RosterImporter:
         if not does_file_exist(file_path):
             return None
         with open(file_path, encoding="utf-8") as file:
-            file_dict = xmltodict.parse(file.read())
+            file_dict = xmltodict.parse(file.read(), force_list = self.should_force_list)
             self.import_roster_entry_from_dict(file_dict)
     
     def import_roster_entry_from_dict(self, roster_dict: dict):
@@ -92,19 +94,14 @@ class RosterImporter:
         
         # Also insert any functions.
         try:
-            logging.info(f"functionlabels JSON is {locomotive.get('functionlabels')}")
             for function_json in locomotive.get("functionlabels").get("functionlabel"):
-                logging.info(f"Function JSON is type {type(function_json)}")
                 function = RosterFunction()
                 function.roster_entry = roster_entry.roster_id
-                f_num = function_json.get("@num")
-                logging.info(f"Function num is {f_num}")
-                function.number = int(function_json.get("@num"))
+                function.number = function_json.get("@num")
                 function.name = function_json.get("#text")
                 function.lockable = function_json.get("@lockable").lower() == "true"
                 self.roster_db.insert_roster_entry_function(function)
         except (KeyError, AttributeError) as e:
-            traceback.print_exc()
             logging.warning("Error getting functions: %s", e)
 
         logging.info("Imported entry with ID %s", roster_entry.roster_id)
@@ -117,6 +114,10 @@ class RosterImporter:
             roster_entry.operating_duration = pair["value"]
         elif pair["key"] == "LastOperated": # TODO: Convert to epoch seconds.
             roster_entry.last_operated = roster_iso_datetime_string_to_epoch_second(pair["value"])
+    
+            
+    def should_force_list(self, path, key, value) -> bool:
+        return key in FORCE_LIST_KEYS
 
 
 
