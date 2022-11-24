@@ -55,7 +55,7 @@ class RosterImporter:
         if not does_file_exist(file_path):
             return None
         with open(file_path, encoding="utf-8") as file:
-            file_dict = xmltodict.parse(file.read(), force_list=('functionlabels',))
+            file_dict = xmltodict.parse(file.read())
             self.import_roster_entry_from_dict(file_dict)
     
     def import_roster_entry_from_dict(self, roster_dict: dict):
