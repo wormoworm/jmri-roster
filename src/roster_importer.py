@@ -20,8 +20,6 @@ DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
 MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True").lower() == "true"
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-# We always want these keys to be parsed into lists by xmltodict - even if there's only one of them.
-FORCE_LIST_KEYS = ["functionlabel", "keyvaluepair"]
 
 def does_file_exist(path):
     return os.path.isfile(path)
@@ -57,7 +55,7 @@ class RosterImporter:
         if not does_file_exist(file_path):
             return None
         with open(file_path, encoding="utf-8") as file:
-            file_dict = xmltodict.parse(file.read(), force_list = self.should_force_list)
+            file_dict = xmltodict.parse(file.read())
             self.import_roster_entry_from_dict(file_dict)
     
     def import_roster_entry_from_dict(self, roster_dict: dict):
@@ -78,31 +76,36 @@ class RosterImporter:
             roster_entry.image_file_path = locomotive.get("@imageFilePath").split("/")[-1]
 
         # Check for any extra attributes.
-        try:
-            key_value_pair = locomotive.get("attributepairs").get("keyvaluepair")
-            if isinstance(key_value_pair, list):    # There is more than one key-value attribute to process.
-                for key_value in key_value_pair:
-                    self.process_key_value_pair(key_value, roster_entry)
-            elif isinstance(key_value_pair, OrderedDict):
-                self.process_key_value_pair(key_value_pair, roster_entry) # There is only one key-value attribute.
-            else:
-                logging.debug("KVP type (%s) not supported", type(key_value_pair))
-        except (KeyError, AttributeError) as e:
-            logging.warning("Error getting KVPs: %s", e)
+        attribute_pairs = locomotive.get("attributepairs")
+        if attribute_pairs:
+            try:
+                key_value_pair = attribute_pairs.get("keyvaluepair")
+                if isinstance(key_value_pair, list):    # There is more than one key-value attribute to process.
+                    for key_value in key_value_pair:
+                        self.process_key_value_pair(key_value, roster_entry)
+                elif isinstance(key_value_pair, OrderedDict):
+                    self.process_key_value_pair(key_value_pair, roster_entry) # There is only one key-value attribute.
+                else:
+                    logging.debug("KVP type (%s) not supported", type(key_value_pair))
+            except (KeyError, AttributeError) as e:
+                logging.warning("Error getting KVPs: %s", e)
 
         self.roster_db.insert_roster_entry(roster_entry)
         
         # Also insert any functions.
-        try:
-            for function_json in locomotive.get("functionlabels").get("functionlabel"):
-                function = RosterFunction()
-                function.roster_entry = roster_entry.roster_id
-                function.number = function_json.get("@num")
-                function.name = function_json.get("#text")
-                function.lockable = function_json.get("@lockable").lower() == "true"
-                self.roster_db.insert_roster_entry_function(function)
-        except (KeyError, AttributeError) as e:
-            logging.warning("Error getting functions: %s", e)
+        function_labels = locomotive.get("functionlabels")
+        if function_labels:
+            try:
+                function_label_object = function_labels.get("functionlabel")
+                if isinstance(function_label_object, list):    # There is more than one function to process.
+                    for function_label in function_label_object:
+                        self.process_function(function_label, roster_entry)
+                elif isinstance(function_label_object, OrderedDict):
+                    self.process_function(function_label_object, roster_entry) # There is only one function.
+                else:
+                    logging.debug(f"Functionlabel type ({type(key_value_pair)}) not supported")
+            except (KeyError, AttributeError) as e:
+                logging.warning("Error getting functions: %s", e)
 
         logging.info("Imported entry with ID %s", roster_entry.roster_id)
         
@@ -114,10 +117,15 @@ class RosterImporter:
             roster_entry.operating_duration = pair["value"]
         elif pair["key"] == "LastOperated": # TODO: Convert to epoch seconds.
             roster_entry.last_operated = roster_iso_datetime_string_to_epoch_second(pair["value"])
+
     
-            
-    def should_force_list(self, path, key, value) -> bool:
-        return key in FORCE_LIST_KEYS
+    def process_function(self, function_dict: dict, roster_entry: RosterEntry):
+        function = RosterFunction()
+        function.roster_entry = roster_entry.roster_id
+        function.number = function_dict.get("@num")
+        function.name = function_dict.get("#text")
+        function.lockable = function_dict.get("@lockable").lower() == "true"
+        self.roster_db.insert_roster_entry_function(function)
 
 
 
