@@ -95,7 +95,7 @@ class RosterImporter:
             for function_json in locomotive.get("functionlabels").get("functionlabel"):
                 function = RosterFunction()
                 function.roster_entry = roster_entry.roster_id
-                function.number = function_json.get("@num")
+                function.number = int(function_json.get("@num"))
                 function.name = function_json.get("#text")
                 function.lockable = function_json.get("@lockable").lower() == "true"
                 self.roster_db.insert_roster_entry_function(function)
