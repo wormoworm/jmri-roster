@@ -92,6 +92,7 @@ class RosterImporter:
         
         # Also insert any functions.
         try:
+            logging.info(f"functionlabels JSON is {locomotive.get('functionlabels')}")
             for function_json in locomotive.get("functionlabels").get("functionlabel"):
                 logging.info(f"Function JSON is type {type(function_json)}")
                 function = RosterFunction()
