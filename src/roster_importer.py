@@ -100,6 +100,7 @@ class RosterImporter:
                 self.roster_db.insert_roster_entry_function(function)
         except (KeyError, AttributeError) as e:
             logging.warning("Error getting functions: %s", e)
+            raise e
 
         logging.info("Imported entry with ID %s", roster_entry.roster_id)
         
