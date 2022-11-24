@@ -20,6 +20,7 @@ class RosterEntry(Model):
     model = CharField(null=True)
     owner = CharField(null=True)
     comment = CharField(null=True)
+    decoder = CharField(null=True)
     image_file_path = CharField(null=True)
     operating_duration = IntegerField(null=True)
     last_operated = IntegerField(null=True)

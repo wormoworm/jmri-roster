@@ -30,7 +30,15 @@ def roster_iso_datetime_string_to_epoch_second(iso_time: str) -> int:
         utc_time = datetime.strptime(iso_time[0:19], "%Y-%m-%dT%H:%M:%S")
         return (utc_time - datetime(1970, 1, 1)).total_seconds()
     except ValueError as e:
-        logging.warning("Could not parse ISO datetime: %s", e)
+        logging.debug(f"Could not parse ISO datetime: {str(e)}")
+        return None
+
+def roster_locale_datetime_string_to_epoch_second(last_operated_string: str) -> int:
+    try:
+        utc_time = datetime.strptime(last_operated_string, "%a %b %d %H:%M:%S %Z %Y")
+        return (utc_time - datetime(1970, 1, 1)).total_seconds()
+    except ValueError as e:
+        logging.debug(f"Could not parse locale datetime: {str(e)}")
         return None
 
 class RosterImporter:
@@ -68,7 +76,8 @@ class RosterImporter:
             manufacturer = locomotive.get("@mfg"),
             model = locomotive.get("@model"),
             owner = locomotive.get("@owner"),
-            comment = locomotive.get("@comment")
+            comment = locomotive.get("@comment"),
+            decoder = locomotive.get("decoder").get("@model")
         )
         # Add the image file path, if set and not empty. We convert this to a path that is relative to the roster folder.
         locomotive_image_file_path = locomotive.get("@imageFilePath")
@@ -115,8 +124,8 @@ class RosterImporter:
             roster_entry.name = pair["value"]
         elif pair["key"] == "OperatingDuration":
             roster_entry.operating_duration = pair["value"]
-        elif pair["key"] == "LastOperated": # TODO: Convert to epoch seconds.
-            roster_entry.last_operated = roster_iso_datetime_string_to_epoch_second(pair["value"])
+        elif pair["key"] == "LastOperated":
+            roster_entry.last_operated = parse_roster_datetime(pair["value"])
 
     
     def process_function(self, function_dict: dict, roster_entry: RosterEntry):
@@ -126,6 +135,16 @@ class RosterImporter:
         function.name = function_dict.get("#text")
         function.lockable = function_dict.get("@lockable").lower() == "true"
         self.roster_db.insert_roster_entry_function(function)
+
+        
+def parse_roster_datetime(datetime: str) -> int:
+    # This field can annoyingly be in one of two formats, so we try one and then the other.
+    timestamp_from_iso = roster_iso_datetime_string_to_epoch_second(datetime)
+    if timestamp_from_iso:
+        return timestamp_from_iso
+    else:
+        logging.debug(f"Could not parse datetime string as ISO, trying locale format instead...")
+        return roster_locale_datetime_string_to_epoch_second(datetime)
 
 
 
