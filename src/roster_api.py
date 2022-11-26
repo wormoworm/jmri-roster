@@ -108,8 +108,8 @@ def get_roster_entry_image(id: str, size: int = None, search_files: bool = True)
 
 
 @app.get("/", response_class=HTMLResponse)
-async def show_roster(request: Request, owner: str = None, manufacturer: str = None, model: str = None, decoder: str = None):
-    entries = RosterDatabase().get_roster_entries(owner, manufacturer, model, decoder)
+async def show_roster(request: Request, owner: str = None, manufacturer: str = None, model: str = None, classification: str = None, decoder: str = None):
+    entries = RosterDatabase().get_roster_entries(owner, manufacturer, model, classification, decoder)
     return templates.TemplateResponse("roster.html", {"request": request, "roster_entries": entries})
 
 

@@ -9,9 +9,9 @@
         <div id="content">
             <div class="contentHorizontalPadding">
                 <h1 id="title">{{ roster_entry.get_friendly_id() }}</h1>
-                {% if roster_entry.name -%}
+                <!-- {% if roster_entry.name -%}
                     <h2 id="name">{{ roster_entry.name }}</h2>
-                {% endif %}
+                {% endif %} -->
                 <h2 id="address" class="valueWithlabel"><span class="valueLabel">Address: </span>{{ roster_entry.dcc_address }}</h2>            
             </div>
             {% if roster_entry.has_image() -%}
@@ -22,10 +22,24 @@
             <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
                 <h3 id="locomotiveInfoTitle">Locomotive information</h3>
                 <table id="basicInfo" class="valueTable" cellspacing="0" cellpadding="0">
-                    <tr>
-                        <td class="tableRowLabel"><p class="label">Roster ID:</p></td>
-                        <td class="tableRowValue"><p class="value">{{ roster_entry.roster_id }}</p></td>
-                    </tr>
+                    {% if roster_entry.classification -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Class:</p></td>
+                            <td class="tableRowValue"><a href="/?classification={{ roster_entry.classification|urlencode }}"><p class="value">{{ roster_entry.classification }}</p></a></td>
+                        </tr>
+                    {% endif %}
+                    {% if roster_entry.number -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Number:</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.number }}</p></td>
+                        </tr>
+                    {% endif %}
+                    {% if roster_entry.name -%}
+                        <tr>
+                            <td class="tableRowLabel"><p class="label">Name:</p></td>
+                            <td class="tableRowValue"><p class="value">{{ roster_entry.name }}</p></td>
+                        </tr>
+                    {% endif %}
                     {% if roster_entry.manufacturer -%}
                         <tr>
                             <td class="tableRowLabel"><p class="label">Manufacturer:</p></td>
@@ -50,18 +64,6 @@
                             <td class="tableRowValue"><a href="/?decoder={{ roster_entry.decoder|urlencode }}"><p class="value">{{ roster_entry.decoder }}</p></a></td>
                         </tr>
                     {% endif %}
-                    {% if roster_entry.last_operated -%}
-                        <tr>
-                            <td class="tableRowLabel"><p class="label">Last Operated (JMRI):</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.last_operated_datetime().strftime('%Y-%m-%d %H:%M') }}</p></td>
-                        </tr>
-                    {% endif %}
-                    {% if roster_entry.operating_duration -%}
-                        <tr>
-                            <td class="tableRowLabel"><p class="label">Operating duration  (JMRI):</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.operating_duration_hms() }}</p></td>
-                        </tr>
-                    {% endif %}
                 </table>
             </div>
             {% if roster_entry.comment -%}
@@ -80,6 +82,25 @@
                         <td class="tableRowValue"><p class="value">{{ function.name }}</p></td>
                     </tr>
                 {% endfor %}
+                </table>
+            </div>
+            {% endif %}
+            {% if roster_entry.last_operated or roster_entry.operating_duration -%}
+            <div class="contentBlock contentHorizontalPadding contentVerticalPadding">
+                <h3>JMRI</h3>
+                <table id="jmri" class="valueTable" cellspacing="0" cellpadding="0">
+                {% if roster_entry.last_operated -%}
+                    <tr>
+                        <td class="tableRowLabel"><p class="label">Last Operated:</p></td>
+                        <td class="tableRowValue"><p class="value">{{ roster_entry.last_operated_datetime().strftime('%Y-%m-%d %H:%M') }}</p></td>
+                    </tr>
+                {% endif %}
+                {% if roster_entry.operating_duration -%}
+                    <tr>
+                        <td class="tableRowLabel"><p class="label">Operating duration:</p></td>
+                        <td class="tableRowValue"><p class="value">{{ roster_entry.operating_duration_hms() }}</p></td>
+                    </tr>
+                {% endif %}
                 </table>
             </div>
             {% endif %}
