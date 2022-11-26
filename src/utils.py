@@ -2,7 +2,7 @@ import os
 from os.path import exists
 
 DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
-IMAGE_FILE_EXTENSIONS = [ ".jpg", ".jpeg", ".png"]
+IMAGE_FILE_EXTENSIONS = [ ".jpg", ".jpeg", ".png", ".webp"]
 
 ROSTER_DATABASE_LOCATION = os.getenv("ROSTER_DATABASE_LOCATION", "/data/roster.db")
 os.makedirs(os.path.dirname(ROSTER_DATABASE_LOCATION), exist_ok=True)
