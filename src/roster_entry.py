@@ -16,6 +16,7 @@ class RosterEntry(Model):
     # Optional properties.
     number = CharField(null=True)
     name = CharField(null=True)
+    classification = CharField(null=True)
     manufacturer = CharField(null=True)
     model = CharField(null=True)
     owner = CharField(null=True)

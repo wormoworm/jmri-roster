@@ -2,19 +2,14 @@ import os
 import pathlib
 import logging
 import json
-import time
 from typing import OrderedDict
-from xml.dom.minidom import Attr
 import xmltodict
-import traceback
 from roster_entry import RosterEntry, RosterFunction
 from roster_database import RosterDatabase
 from roster_watcher import RosterWatcher
-from playhouse.shortcuts import model_to_dict
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
 from datetime import datetime
 from rich.logging import RichHandler
+from utils import ROSTER_DATABASE_LOCATION
 
 DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
 MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True").lower() == "true"
@@ -43,7 +38,10 @@ def roster_locale_datetime_string_to_epoch_second(last_operated_string: str) -> 
 
 class RosterImporter:
 
-    roster_db = RosterDatabase()
+    roster_db: RosterDatabase
+
+    def __init__(self) -> None:
+        self.roster_db = RosterDatabase()
     
     def should_process_file(self, file_path: str):
         return pathlib.Path(file_path).suffix.lower() == ".xml"
@@ -122,6 +120,8 @@ class RosterImporter:
     def process_key_value_pair(self, pair: dict, roster_entry: RosterEntry):
         if pair["key"] == "Name":
             roster_entry.name = pair["value"]
+        elif pair["key"] == "Class":
+            roster_entry.classification = pair["value"]
         elif pair["key"] == "OperatingDuration":
             roster_entry.operating_duration = pair["value"]
         elif pair["key"] == "LastOperated":
@@ -161,7 +161,8 @@ if __name__ == "__main__":
         datefmt="[%X]",
         handlers=[RichHandler(omit_repeated_times=False)],
     )
-    RosterDatabase().clear_all_data()
+    # Do a dummy initialisation of the database here, so we can request that the tables be dropped.
+    RosterDatabase(drop_tables = True)
     # First, import the roster from the roster directory. This takes care of any roster changes that may have occurred whilst we were not running
     importer.process_existing_files(DIRECTORY_ROSTER)
     # Only watch for roster changes if specified.

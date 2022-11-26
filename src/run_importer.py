@@ -27,7 +27,7 @@ if __name__ == "__main__":
         handlers=[RichHandler(omit_repeated_times=False)],
     )
     importer = RosterImporter()
-    RosterDatabase().clear_all_data()
+    RosterDatabase().clear_tables()
     # First, import the roster from the roster directory. This takes care of any roster changes that may have occurred whilst we were not running
     importer.process_existing_files(DIRECTORY_ROSTER)
     # Only watch for roster changes if specified.

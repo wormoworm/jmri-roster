@@ -10,8 +10,7 @@ from datetime import datetime
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from starlette.responses import StreamingResponse
-import logging
+from peewee import DoesNotExist
 
 DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
 IMAGE_FILE_EXTENSIONS = [ ".jpg", ".jpeg", ".png"]
@@ -22,28 +21,49 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/api/v2/roster")
-def get_roster(owner: str = None, manufacturer: str = None, model: str = None, decoder: str = None):
-    entries = RosterDatabase().get_roster_entries(owner, manufacturer, model, decoder)
-    entries_array = []
-    for entry in entries:
-        entries_array.append(model_to_dict(entry, backrefs=True))
-    return {"roster": entries_array}
+def get_roster(owner: str = None, manufacturer: str = None, model: str = None, classification: str = None, decoder: str = None):
+    return {"roster": RosterDatabase().get_roster_entries(owner, manufacturer, model, classification, decoder)}
 
 
 @app.get("/api/v2/roster_entry/id/{id}")
 def get_roster_entry_by_id(id: str):
-    entry = RosterDatabase().get_roster_entry_by_id(id)
-    if entry is None:
+    try:
+        return {"roster_entry": RosterDatabase().get_roster_entry_by_id(id)}
+    except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
-    return {"roster_entry": model_to_dict(entry, backrefs=True)}
 
 
 @app.get("/api/v2/roster_entry/address/{address}")
 def get_roster_entry_by_address(address: str):
-    entry = RosterDatabase().get_roster_entry_by_address(address)
-    if entry is None:
+    try:
+        return {"roster_entry": RosterDatabase().get_roster_entry_by_address(address)}
+    except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Roster entry with address {address} not found")
-    return {"roster_entry": model_to_dict(entry, backrefs=True)}
+
+
+@app.get("/api/v2/owners")
+async def get_owners():
+    return {"owners": RosterDatabase().get_owners()}
+
+
+@app.get("/api/v2/manufacturers")
+async def get_manufacturers():
+    return {"manufacturers": RosterDatabase().get_manufacturers()}
+
+
+@app.get("/api/v2/models")
+async def get_models():
+    return {"models": RosterDatabase().get_models()}
+
+
+@app.get("/api/v2/classifications")
+async def get_classifications():
+    return {"classifications": RosterDatabase().get_classifications()}
+
+
+@app.get("/api/v2/decoders")
+async def get_decoders():
+    return {"decoders": RosterDatabase().get_decoders()}
 
 
 def output_roster_image(file_path: str, size: int = None) -> Response:
