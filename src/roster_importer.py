@@ -15,6 +15,29 @@ DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
 MONITOR_CHANGES = os.getenv("MONITOR_CHANGES", "True").lower() == "true"
 DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
+DECODER_NAME_MAP = {
+    "D13SRJ": "NCE D13SRJ",
+    "LokSound 5": "ESU LokSound 5",
+    "MX600R version 31+": "Zimo MX600R",
+    "MX600R version 37+": "Zimo MX600R",
+    "MX600R version 39+": "Zimo MX600R",
+    "MX616N version 37+": "Zimo MX616N",
+    "MX617 version 37+": "Zimo MX617N",
+    "MX617F version 37+": "Zimo MX617F",
+    "MX617N version 37+": "Zimo MX617N",
+    "MX618N18 version 37+": "Zimo MX618N18",
+    "MX644 version 36+": "Zimo MX644D",
+    "MX645 version 37+": "Zimo MX645R",
+    "MX645R version 36+": "Zimo MX645R",
+    "MX648 version 37+": "Zimo MX648R",
+    "R8249": "Hornby R8429",
+    "Silver+ 21 10321-01": "Lenz Silver+ 21 NEM660",
+    "Silver+ mini NEM651 10311-01": "Lenz Silver+ mini NEM651",
+    "Silver+ NEM652 10331-01": "Lenz Silver+ NEM652",
+    "Standard+ NEM652 10231-01": "Lenz Standard+ NEM652",
+    "Standard+ V2 NEM652 10231-02": "Lenz Standard+ V2 NEM652"
+}
+
 
 def does_file_exist(path):
     return os.path.isfile(path)
@@ -27,6 +50,8 @@ def roster_iso_datetime_string_to_epoch_second(iso_time: str) -> int:
     except ValueError as e:
         logging.debug(f"Could not parse ISO datetime: {str(e)}")
         return None
+    
+
 
 def roster_locale_datetime_string_to_epoch_second(last_operated_string: str) -> int:
     try:
@@ -75,7 +100,7 @@ class RosterImporter:
             model = locomotive.get("@model"),
             owner = locomotive.get("@owner"),
             comment = locomotive.get("@comment"),
-            decoder = locomotive.get("decoder").get("@model")
+            decoder = process_decoder_model(locomotive.get("decoder").get("@model"))
         )
         # Add the image file path, if set and not empty. We convert this to a path that is relative to the roster folder.
         locomotive_image_file_path = locomotive.get("@imageFilePath")
@@ -135,6 +160,13 @@ class RosterImporter:
         function.name = function_dict.get("#text")
         function.lockable = function_dict.get("@lockable").lower() == "true"
         self.roster_db.insert_roster_entry_function(function)
+
+
+def process_decoder_model(decoder: str) -> str:
+    if decoder in DECODER_NAME_MAP:
+        return DECODER_NAME_MAP[decoder]
+    else:
+        return decoder
 
         
 def parse_roster_datetime(datetime: str) -> int:
