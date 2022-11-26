@@ -11,6 +11,27 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from peewee import DoesNotExist
+from dataclasses import dataclass, fields
+import logging
+
+@dataclass
+class FilterParams:
+    owner: str = None
+    manufacturer: str = None
+    model: str = None
+    classification: str = None
+    decoder: str = None
+
+    def filter_count(self):
+        total = 0
+        for field in self.__dataclass_fields__:
+            if getattr(self, field):
+                total+= 1
+        return total
+
+    def has_filters(self):
+        return self.filter_count() > 0
+
 
 DIRECTORY_ROSTER = os.getenv("DIRECTORY_ROSTER", "/roster")
 IMAGE_FILE_EXTENSIONS = [ ".jpg", ".jpeg", ".png"]
@@ -110,7 +131,9 @@ def get_roster_entry_image(id: str, size: int = None, search_files: bool = True)
 @app.get("/", response_class=HTMLResponse)
 async def show_roster(request: Request, owner: str = None, manufacturer: str = None, model: str = None, classification: str = None, decoder: str = None):
     entries = RosterDatabase().get_roster_entries(owner, manufacturer, model, classification, decoder)
-    return templates.TemplateResponse("roster.html", {"request": request, "roster_entries": entries})
+    params = FilterParams(owner, manufacturer, model, classification, decoder)
+    logging.warn(f"Params: {params}")
+    return templates.TemplateResponse("roster.html", {"request": request, "roster_entries": entries, "filter_params": params})
 
 
 @app.get("/roster_entry/{id}", response_class=HTMLResponse)

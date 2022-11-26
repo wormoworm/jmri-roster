@@ -9,6 +9,24 @@
         <div id="content">
             <div class="contentHorizontalPadding">
                 <a href="/"><h1>Roster</h1></a>
+                {% if filter_params.has_filters() %}
+                <h2>Filters</h1>
+                {% endif %}
+                {% if filter_params.owner %}
+                <p>Owner: <b>{{ filter_params.owner }}</b></p>
+                {% endif %}
+                {% if filter_params.manufacturer %}
+                <p>Manufacturer: <b>{{ filter_params.manufacturer }}</b></p>
+                {% endif %}
+                {% if filter_params.model %}
+                <p>Model: <b>{{ filter_params.model }}</b></p>
+                {% endif %}
+                {% if filter_params.classification %}
+                <p>Class: <b>{{ filter_params.classification }}</b></p>
+                {% endif %}
+                {% if filter_params.decoder %}
+                <p>Decoder: <b>{{ filter_params.decoder }}</b></p>
+                {% endif %}
                 <p>{{ roster_entries|length }} locomotive{% if roster_entries|length > 1 -%} s{% endif %} found.</p>
             </div>
             <div id="locomotiveGrid" class="contentHorizontalPadding contentVerticalPadding">
