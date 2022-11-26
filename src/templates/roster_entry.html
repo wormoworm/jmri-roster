@@ -29,25 +29,25 @@
                     {% if roster_entry.manufacturer -%}
                         <tr>
                             <td class="tableRowLabel"><p class="label">Manufacturer:</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.manufacturer }}</p></td>
+                            <td class="tableRowValue"><a href="/?manufacturer={{ roster_entry.manufacturer|urlencode }}"><p class="value">{{ roster_entry.manufacturer }}</p></a></td>
                         </tr>
                     {% endif %}
                     {% if roster_entry.model -%}
                         <tr>
                             <td class="tableRowLabel"><p class="label">Model:</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.model }}</p></td>
+                            <td class="tableRowValue"><a href="/?model={{ roster_entry.model|urlencode }}"><p class="value">{{ roster_entry.model }}</p></a></td>
                         </tr>
                     {% endif %}
                     {% if roster_entry.owner -%}
                         <tr>
                             <td class="tableRowLabel"><p class="label">Owner:</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.owner }}</p></td>
+                            <td class="tableRowValue"><a href="/?owner={{ roster_entry.owner|urlencode }}"><p class="value">{{ roster_entry.owner }}</p></a></td>
                         </tr>
                     {% endif %}
                     {% if roster_entry.decoder -%}
                         <tr>
                             <td class="tableRowLabel"><p class="label">Decoder:</p></td>
-                            <td class="tableRowValue"><p class="value">{{ roster_entry.decoder }}</p></td>
+                            <td class="tableRowValue"><a href="/?decoder={{ roster_entry.decoder|urlencode }}"><p class="value">{{ roster_entry.decoder }}</p></a></td>
                         </tr>
                     {% endif %}
                     {% if roster_entry.last_operated -%}

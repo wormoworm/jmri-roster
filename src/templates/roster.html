@@ -8,8 +8,8 @@
     <body>
         <div id="content">
             <div class="contentHorizontalPadding">
-                <h1>Roster</h1>
-                <p>The roster contains {{ roster_entries|length }} locomotives.</p>
+                <a href="/"><h1>Roster</h1></a>
+                <p>{{ roster_entries|length }} locomotive{% if roster_entries|length > 1 -%} s{% endif %} found.</p>
             </div>
             <div id="locomotiveGrid" class="contentHorizontalPadding contentVerticalPadding">
                 {% for roster_entry in roster_entries %}

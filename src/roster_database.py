@@ -24,8 +24,17 @@ class RosterDatabase:
     def insert_roster_entry_function(self, function: RosterFunction):
         function.save()
 
-    def get_all_roster_entries(self):
-        return list(RosterEntry.select().order_by(RosterEntry.number))
+    def get_roster_entries(self, owner: str = None, manufacturer: str = None, model: str = None, decoder: str = None):
+        query = RosterEntry.select().order_by(RosterEntry.number)
+        if owner:
+            query = query.where(RosterEntry.owner == owner)
+        if manufacturer:
+            query = query.where(RosterEntry.manufacturer == manufacturer)
+        if model:
+            query = query.where(RosterEntry.model == model)
+        if decoder:
+            query = query.where(RosterEntry.decoder == decoder)
+        return list(query)
 
     def get_roster_entry_by_id(self, roster_id: int) -> RosterEntry:
         return RosterEntry.get_or_none(RosterEntry.roster_id == roster_id)

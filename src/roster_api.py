@@ -22,8 +22,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/api/v2/roster")
-def get_roster():
-    entries = RosterDatabase().get_all_roster_entries()
+def get_roster(owner: str = None, manufacturer: str = None, model: str = None, decoder: str = None):
+    entries = RosterDatabase().get_roster_entries(owner, manufacturer, model, decoder)
     entries_array = []
     for entry in entries:
         entries_array.append(model_to_dict(entry, backrefs=True))
@@ -88,8 +88,8 @@ def get_roster_entry_image(id: str, size: int = None, search_files: bool = True)
 
 
 @app.get("/", response_class=HTMLResponse)
-async def show_roster(request: Request):
-    entries = RosterDatabase().get_all_roster_entries()
+async def show_roster(request: Request, owner: str = None, manufacturer: str = None, model: str = None, decoder: str = None):
+    entries = RosterDatabase().get_roster_entries(owner, manufacturer, model, decoder)
     return templates.TemplateResponse("roster.html", {"request": request, "roster_entries": entries})
 
 
