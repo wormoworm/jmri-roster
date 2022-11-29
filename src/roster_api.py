@@ -1,5 +1,6 @@
 from queue import Empty
 from fastapi import FastAPI, HTTPException, Request, Response
+from starlette.datastructures import Headers
 import os
 from os.path import exists
 from io import BytesIO
@@ -13,6 +14,8 @@ from fastapi.templating import Jinja2Templates
 from peewee import DoesNotExist
 from dataclasses import dataclass, fields
 import logging
+
+FORMAT_TIMESTAMP_HTTP_HEADER = "%a, %d %b %Y %H:%M:%S"
 
 @dataclass
 class FilterParams:
@@ -87,7 +90,13 @@ async def get_decoders():
     return {"decoders": RosterDatabase().get_decoders()}
 
 
-def output_roster_image(file_path: str, size: int = None) -> Response:
+def output_roster_image(file_path: str, size: int = None, browser_if_modified_since: str = None) -> Response:
+    image_modified_time = round(os.path.getmtime(file_path))
+    if browser_if_modified_since:
+        browser_modified_timestamp = round(datetime.strptime(browser_if_modified_since, FORMAT_TIMESTAMP_HTTP_HEADER).timestamp())
+        if image_modified_time <= browser_modified_timestamp:
+            return Response(None, status_code=304)
+
     with Image.open(file_path) as image:
         # Resize image if size is set
         if size:
@@ -100,8 +109,11 @@ def output_roster_image(file_path: str, size: int = None) -> Response:
                 image = image.resize((desired_width, desired_height), Image.ANTIALIAS)
         image_bytes = BytesIO()
         image.save(image_bytes, format="png")
+        modified_header_text = datetime.fromtimestamp(image_modified_time).strftime(FORMAT_TIMESTAMP_HTTP_HEADER)
+        # Output the modified timestamp so the browser can keep a record of it for the next request.
+        headers = { "Last-Modified": modified_header_text}
         # media_type here sets the media type of the actual response sent to the client.
-        return Response(content=image_bytes.getvalue(), media_type="image/png")
+        return Response(content=image_bytes.getvalue(), media_type="image/png", headers=headers)
 
 
 def search_for_roster_entry_image(roster_id: str) -> str:
@@ -114,14 +126,14 @@ def search_for_roster_entry_image(roster_id: str) -> str:
 
 
 @app.get("/api/v2/roster_entry/{id}/image")
-def get_roster_entry_image(id: str, size: int = None, search_files: bool = True):
+def get_roster_entry_image(request: Request, id: str, size: int = None, search_files: bool = True):
     entry = RosterDatabase().get_roster_entry_by_id(id)
     if entry is None:
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
     image_file_full_path = entry.get_image_file_full_path(search_files)
     if image_file_full_path:
         try:
-            return output_roster_image(image_file_full_path, size)
+            return output_roster_image(image_file_full_path, size, request.headers.get("If-Modified-Since"))
         except FileNotFoundError as e:
             raise HTTPException(status_code=404, detail=f"Error loading load image for roster entry {id}: {str(e)}.")
     else:
