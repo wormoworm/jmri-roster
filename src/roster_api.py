@@ -91,9 +91,12 @@ async def get_decoders():
 
 
 def output_roster_image(file_path: str, size: int = None, browser_if_modified_since: str = None) -> Response:
+    # Get the image file's modification time - we will use this for caching
     image_modified_time = round(os.path.getmtime(file_path))
+    # Check this modification timestamp against the one provided by the browser, if supplied.
     if browser_if_modified_since:
         browser_modified_timestamp = round(datetime.strptime(browser_if_modified_since, FORMAT_TIMESTAMP_HTTP_HEADER).timestamp())
+        # The the file's modification time is before or equal to the browser's modification time, this means we do not have a more recent image than the browser, so we can simply return a 304.
         if image_modified_time <= browser_modified_timestamp:
             return Response(None, status_code=304)
 
