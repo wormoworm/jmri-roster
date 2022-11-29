@@ -18,6 +18,7 @@ DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 DECODER_NAME_MAP = {
     "D13SRJ": "NCE D13SRJ",
     "LokSound 5": "ESU LokSound 5",
+    "LokSound 5 DCC": "ESU LokSound 5",
     "MX600R version 31+": "Zimo MX600R",
     "MX600R version 37+": "Zimo MX600R",
     "MX600R version 39+": "Zimo MX600R",
@@ -29,6 +30,7 @@ DECODER_NAME_MAP = {
     "MX644 version 36+": "Zimo MX644D",
     "MX645 version 37+": "Zimo MX645R",
     "MX645R version 36+": "Zimo MX645R",
+    "MX645P22 version 32+": "Zimo MX645P22",
     "MX648 version 37+": "Zimo MX648R",
     "R8249": "Hornby R8429",
     "Silver+ 21 10321-01": "Lenz Silver+ 21 NEM660",
