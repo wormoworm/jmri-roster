@@ -74,10 +74,7 @@ class RosterDatabase:
 
     def get_distinct_values(self, column) -> List[str]:
         entries = RosterEntry().select(column.distinct()).execute()
-        entries_array = []
-        for entry in entries:
-            entries_array.append(model_to_dict(entry))
-        return list(filter(None, map(lambda it: it[column.name], entries_array)))
+        return list(filter(None, map(lambda entry: model_to_dict(entry)[column.name], entries)))
     
     # def drop_tables(self):
     #     self.db.drop_tables((RosterEntry, RosterFunction))

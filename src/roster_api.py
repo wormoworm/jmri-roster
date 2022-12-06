@@ -46,13 +46,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/api/v2/roster")
 def get_roster(owner: str = None, manufacturer: str = None, model: str = None, classification: str = None, decoder: str = None):
-    return {"roster": RosterDatabase().get_roster_entries(owner, manufacturer, model, classification, decoder)}
+    entries = RosterDatabase().get_roster_entries(owner, manufacturer, model, classification, decoder)
+    # Transform the list of RosterEntrys to a list of dicts
+    roster = list(map(lambda entry: model_to_dict(entry), entries))
+    return {"roster": roster}
 
 
 @app.get("/api/v2/roster_entry/id/{id}")
 def get_roster_entry_by_id(id: str):
     try:
-        return {"roster_entry": RosterDatabase().get_roster_entry_by_id(id)}
+        return {"roster_entry": model_to_dict(RosterDatabase().get_roster_entry_by_id(id))}
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
 
@@ -60,7 +63,7 @@ def get_roster_entry_by_id(id: str):
 @app.get("/api/v2/roster_entry/address/{address}")
 def get_roster_entry_by_address(address: str):
     try:
-        return {"roster_entry": RosterDatabase().get_roster_entry_by_address(address)}
+        return {"roster_entry": model_to_dict(RosterDatabase().get_roster_entry_by_address(address))}
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Roster entry with address {address} not found")
 
