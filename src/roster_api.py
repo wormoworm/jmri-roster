@@ -55,7 +55,7 @@ def get_roster(owner: str = None, manufacturer: str = None, model: str = None, c
 @app.get("/api/v2/roster_entry/id/{id}")
 def get_roster_entry_by_id(id: str):
     try:
-        return {"roster_entry": model_to_dict(RosterDatabase().get_roster_entry_by_id(id))}
+        return {"roster_entry": model_to_dict(RosterDatabase().get_roster_entry_by_id(id), backrefs=True)}
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Roster entry with id {id} not found")
 
@@ -63,7 +63,7 @@ def get_roster_entry_by_id(id: str):
 @app.get("/api/v2/roster_entry/address/{address}")
 def get_roster_entry_by_address(address: str):
     try:
-        return {"roster_entry": model_to_dict(RosterDatabase().get_roster_entry_by_address(address))}
+        return {"roster_entry": model_to_dict(RosterDatabase().get_roster_entry_by_address(address), backrefs=True)}
     except DoesNotExist:
         raise HTTPException(status_code=404, detail=f"Roster entry with address {address} not found")
 
